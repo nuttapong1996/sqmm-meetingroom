@@ -98,6 +98,20 @@ return [
             'search_path' => 'public',
             'sslmode' => env('DB_SSLMODE', 'prefer'),
         ],
+        'employee' => [
+            'driver' => 'pgsql',
+            'url' => env('DB_EMP_URL'),
+            'host' => env('DB_EMP_HOST', '127.0.0.1'),
+            'port' => env('DB_EMP_PORT', '5432'),
+            'database' => env('DB_EMP_DATABASE', 'laravel'),
+            'username' => env('DB_EMP_USERNAME', 'root'),
+            'password' => env('DB_EMP_PASSWORD', ''),
+            'charset' => env('DB_EMP_CHARSET', 'utf8'),
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => env('DB_EMP_SSLMODE', 'prefer'),
+        ],
 
         'sqlsrv' => [
             'driver' => 'sqlsrv',
