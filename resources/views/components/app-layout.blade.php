@@ -14,7 +14,7 @@
     <title>{{ $title }}-{{ config('app.name') }}</title>
 </head>
 
-<body class="h-full">
+<body class="flex flex-col min-h-screen">
     <div class="navbar bg-base-100 shadow-sm" data-theme="aqua">
         <div class="flex-none">
             <div class="drawer">
@@ -42,16 +42,44 @@
         <div class="flex-1">
             <div class="flex-12 hidden lg:block">
                 <a class="px-5 py-5" href="/">หน้าหลัก</a>
-                {{-- <a class="text-xl px-5 py-5 text-gray-100" href="/">หน้าหลัก</a> --}}
             </div>
         </div>
-        <div class="flex-none hidden lg:block">
-            <a class="px-5 py-5" href="#">Login</a>
-        </div>
+        @auth
+            <div class="flex-12 hidden lg:block">
+                <a class="px-5 py-5" href="/">รายการจองของฉัน</a>
+            </div>
+            <div class="flex-none hidden lg:block">
+                <div class="dropdown dropdown-end">
+                    <div tabindex="0" role="button" class="btn m-1">{{ Auth::user()->name_thai_emp }}</div>
+                    <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                        @if (Auth::user()->dept_emp == 888930)
+                            <li><a href="{{ route('manage-rooms') }}">Admin</a></li>
+                        @endif
+                        <li><a href="{{ route('logout') }}">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        @endauth
+
+        @guest
+            <div class="flex-none hidden lg:block">
+                <a class="px-5 py-5" href="{{ route('login') }}">Login</a>
+            </div>
+        @endguest
+
     </div>
-    <main>
-        {{ $slot }}
+    <main class="flex-1">
+        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            <div class="flex justify-center items-center">
+                {{ $slot }}
+            </div>
+        </div>
     </main>
+    <footer class="footer sm:footer-horizontal footer-center bg-base-300 text-base-content p-4">
+        <aside>
+            <p>พัฒนาโดยแผนกสารสนเทศ บมจ.สหกลอิควิปเมนท์ (แม่เมาะ)</p>
+        </aside>
+    </footer>
 </body>
 
 </html>
