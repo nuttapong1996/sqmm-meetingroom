@@ -12,6 +12,6 @@ Route::post('login',[CheckEmployee::class , 'login'])->name('check-emp');
 Route::get('logout' ,[CheckEmployee::class , 'logout'])->name('logout');
 
 
-Route::get('/manage/room' , function(){
-    return view('manage.rooms');
-})->middleware('admin')->name('manage-rooms');
+Route::get('manage' , function(){
+    return view('manage.home');
+})->middleware('admin')->name('manage');

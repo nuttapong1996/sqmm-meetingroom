@@ -3,7 +3,7 @@
 ])
 
 <!DOCTYPE html>
-<html class="h-full bg-gray-100" lang="en">
+<html class="h-full bg-gray-100" lang="en" data-theme="sq">
 
 <head>
     <meta charset="UTF-8">
@@ -15,59 +15,121 @@
 </head>
 
 <body class="flex flex-col min-h-screen">
-    <div class="navbar bg-base-100 shadow-sm" data-theme="aqua">
-        <div class="flex-none">
-            <div class="drawer">
+    <div class="navbar bg-primary shadow-sm">
+        <div class="navbar-start">
+            {{-- Mobile Menu --}}
+            <div class="drawer w-10 lg:hidden">
                 <input id="my-drawer-1" type="checkbox" class="drawer-toggle" />
-                <div class="drawer-content">
-                    <label for="my-drawer-1" class="btn btn-square btn-ghost lg:hidden"> <svg
-                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                            class="inline-block h-5 w-5 stroke-current">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 6h16M4 12h16M4 18h16">
-                            </path>
-                        </svg></label>
-                </div>
+                <label for="my-drawer-1" class="btn btn-ghost text-gray-100 hover:bg-secondary text-gray-100 border-0 active:bg-secondary">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h8m-8 6h16" />
+                    </svg>
+                </label>
                 <div class="drawer-side">
                     <label for="my-drawer-1" aria-label="close sidebar" class="drawer-overlay"></label>
-                    <ul class="menu bg-base-200 min-h-full w-80 p-4">
-                        <!-- Sidebar content here -->
-                        <li><a>Sidebar Item 1</a></li>
-                        <li><a>Sidebar Item 2</a></li>
+
+                    <ul class="menu flex flex-col bg-base-200 min-h-full w-80 p-4">
+                        <div class="text-center">
+                            <div class="avatar py-3">
+                                <div class="ring-primary ring-offset-base-100 w-10 rounded-full ring-2 ring-offset-2">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
+                                        </g>
+                                        <g id="SVGRepo_iconCarrier">
+                                            <circle cx="12" cy="6" r="4" fill="#1C274C"></circle>
+                                            <path
+                                                d="M20 17.5C20 19.9853 20 22 12 22C4 22 4 19.9853 4 17.5C4 15.0147 7.58172 13 12 13C16.4183 13 20 15.0147 20 17.5Z"
+                                                fill="#1C274C"></path>
+                                        </g>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="text-base text-primary">{{ Auth::user()->name_thai_emp }}</div>
+                            <div class="text-base text-primary">{{ Auth::user()->code_emp }}</div>
+                            <div class="divider my-0"></div>
+                        </div>
+                        <li>
+                            <a class="btn btn-ghost text-base text-primary mx-1 hover:text-primary"
+                                href="{{ route('home') }}">หน้าหลัก</a>
+                        </li>
+                        @auth
+                            <!-- Sidebar content here -->
+                            <div class="flex-1">
+                                <li>
+                                    <a class="btn btn-ghost text-base text-primary mx-1 hover:text-primary"
+                                        href="#">รายการจองของฉัน</a>
+                                </li>
+                                @can('is-admin')
+                                    <li class="flex-1">
+                                        <a class="btn btn-ghost text-base text-primary mx-1 hover:text-primary"
+                                            href="{{ route('manage') }}">การจัดการ</a>
+                                    </li>
+                                @endcan
+                                <div class="divider"></div>
+                            </div>
+                            <div class="flex-none text-center">
+                                <a class="btn bg-red-500 text-gray-100 hover:bg-red-600" href="{{ route('logout') }}">ออกจากระบบ</a>
+                            </div>
+                        @endauth
+                        {{-- <li><a>Sidebar Item 2</a></li> --}}
                     </ul>
                 </div>
             </div>
+
+            {{-- logo --}}
+            <a class="btn btn-ghost text-xl text-gray-100 mx-1 hover:text-primary">{{ config('app.name') }}</a>
+
+            {{-- Menu Desktop --}}
+            <a class="btn btn-ghost text-base text-gray-100 mx-1 hover:text-primary hidden lg:flex"
+                href="#">หน้าหลัก</a>
+            @auth
+                <a class="btn btn-ghost text-base text-gray-100 mx-1 hover:text-primary hidden lg:flex"
+                    href="#">รายการจองของฉัน</a>
+            @endauth
         </div>
-        <a class=" px-3 text-xl" href="/">{{ config('app.name') }}</a>
-        <div class="flex-1">
-            <div class="flex-12 hidden lg:block">
-                <a class="px-5 py-5" href="/">หน้าหลัก</a>
-            </div>
-        </div>
-        @auth
-            <div class="flex-12 hidden lg:block">
-                <a class="px-5 py-5" href="/">รายการจองของฉัน</a>
-            </div>
-            <div class="flex-none hidden lg:block">
-                <div class="dropdown dropdown-end">
-                    <div tabindex="0" role="button" class="btn m-1">{{ Auth::user()->name_thai_emp }}</div>
-                    <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-                        @can('is-admin')
-                             <li><a href="{{ route('manage-rooms') }}">Admin</a></li>
-                        @endcan
-                        <li><a href="{{ route('logout') }}">Logout</a></li>
-                    </ul>
+
+        <div class="navbar-end">
+            @guest
+                <a class="btn btn-ghost" href="{{ route('login') }}">เข้าสู่ระบบ</a>
+            @endguest
+            {{-- User profile on Desktop --}}
+            @auth
+                <div class="flex gap-2 hidden lg:block">
+                    <div class="dropdown dropdown-end">
+                        <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+                            <div class="w-10 rounded-full">
+                                <svg class="px-2 py-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                                    stroke="#ffffff">
+                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                    <g id="SVGRepo_iconCarrier">
+                                        <circle cx="12" cy="6" r="4" fill="#ffffff"></circle>
+                                        <path
+                                            d="M20 17.5C20 19.9853 20 22 12 22C4 22 4 19.9853 4 17.5C4 15.0147 7.58172 13 12 13C16.4183 13 20 15.0147 20 17.5Z"
+                                            fill="#ffffff"></path>
+                                    </g>
+                                </svg>
+                            </div>
+                        </div>
+                        <ul tabindex="-1"
+                            class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-5 w-52 p-2 shadow">
+                            <li class="text-base text-primary text-center font-bold">{{ Auth::user()->name_thai_emp }}</li>
+                            <div class="divider my-0"></div>
+                            @can('is-admin')
+                                <li class="py-1"><a class="text-base text-primary">การจัดการ</a></li>
+                            @endcan
+                            <li class="py-1"><a class="text-base text-gray-100 bg-red-500" href="{{ route('logout') }}">ออกจากระบบ</a></li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        @endauth
-
-        @guest
-            <div class="flex-none hidden lg:block">
-                <a class="px-5 py-5" href="{{ route('login') }}">Login</a>
-            </div>
-        @endguest
-
+            @endauth
+        </div>
     </div>
+
+    {{-- Content --}}
     <main class="flex-1">
         <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
             <div class="flex justify-center items-center">
@@ -75,6 +137,8 @@
             </div>
         </div>
     </main>
+
+    {{-- Footer --}}
     <footer class="footer sm:footer-horizontal footer-center bg-base-300 text-base-content p-4">
         <aside>
             <p>พัฒนาโดยแผนกสารสนเทศ บมจ.สหกลอิควิปเมนท์ (แม่เมาะ)</p>
