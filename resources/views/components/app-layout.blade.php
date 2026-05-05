@@ -52,9 +52,9 @@
                 <div class="dropdown dropdown-end">
                     <div tabindex="0" role="button" class="btn m-1">{{ Auth::user()->name_thai_emp }}</div>
                     <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-                        @if (Auth::user()->dept_emp == 888930)
-                            <li><a href="{{ route('manage-rooms') }}">Admin</a></li>
-                        @endif
+                        @can('is-admin')
+                             <li><a href="{{ route('manage-rooms') }}">Admin</a></li>
+                        @endcan
                         <li><a href="{{ route('logout') }}">Logout</a></li>
                     </ul>
                 </div>
