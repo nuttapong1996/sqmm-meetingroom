@@ -1,7 +1,7 @@
 <x-app-layout title="เข้าสู่ระบบ">
     <fieldset class="fieldset bg-white bg-base-200 border-base-300 rounded-box w-xs border p-4">
-        <legend class="fieldset-legend">เข้าสู่ระบบ</legend>
-        <form action="{{ route('check-emp') }}" method="POST">
+        <legend class="fieldset-legend text-gray-100 bg-neutral p-2 rounded-3xl">เข้าสู่ระบบ</legend>
+        <form class="fieldset w-xs" action="{{ route('check-emp') }}" method="POST">
             @csrf
             @if (session('error'))
                 <div role="alert" class="alert alert-error mb-5">
@@ -11,13 +11,15 @@
                             d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <span>
-                        {{ session('error')}}
+                        {{ session('error') }}
                     </span>
                 </div>
             @endif
-            <label class="label">รหัสพนักงาน</label>
-            <input type="text" class="input" placeholder="รหัสพนักงาน" name="empcode" id="empcode"
-                autocomplete="off"  />
+            <div class="flex flex-col">
+                <label class="label">รหัสพนักงาน</label>
+                <input type="text" class="input" placeholder="รหัสพนักงาน" name="empcode" id="empcode"
+                    autocomplete="off" />
+            </div>
             {{-- <p class="validator-hint hidden">กรุณากรอกรหัสพนักงาน</p> --}}
 
             {{-- <label class="label">Password</label>

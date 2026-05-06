@@ -20,7 +20,8 @@
             {{-- Mobile Menu --}}
             <div class="drawer w-10 lg:hidden">
                 <input id="my-drawer-1" type="checkbox" class="drawer-toggle" />
-                <label for="my-drawer-1" class="btn btn-ghost text-gray-100 hover:bg-secondary text-gray-100 border-0 active:bg-secondary">
+                <label for="my-drawer-1"
+                    class="btn btn-accent">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-5" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -31,26 +32,28 @@
                     <label for="my-drawer-1" aria-label="close sidebar" class="drawer-overlay"></label>
 
                     <ul class="menu flex flex-col bg-base-200 min-h-full w-80 p-4">
-                        <div class="text-center">
-                            <div class="avatar py-3">
-                                <div class="ring-primary ring-offset-base-100 w-10 rounded-full ring-2 ring-offset-2">
-                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
-                                        </g>
-                                        <g id="SVGRepo_iconCarrier">
-                                            <circle cx="12" cy="6" r="4" fill="#1C274C"></circle>
-                                            <path
-                                                d="M20 17.5C20 19.9853 20 22 12 22C4 22 4 19.9853 4 17.5C4 15.0147 7.58172 13 12 13C16.4183 13 20 15.0147 20 17.5Z"
-                                                fill="#1C274C"></path>
-                                        </g>
-                                    </svg>
+                        @auth
+                            <div class="text-center">
+                                <div class="avatar py-3">
+                                    <div class="ring-primary ring-offset-base-100 w-10 rounded-full ring-2 ring-offset-2">
+                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
+                                            </g>
+                                            <g id="SVGRepo_iconCarrier">
+                                                <circle cx="12" cy="6" r="4" fill="#1C274C"></circle>
+                                                <path
+                                                    d="M20 17.5C20 19.9853 20 22 12 22C4 22 4 19.9853 4 17.5C4 15.0147 7.58172 13 12 13C16.4183 13 20 15.0147 20 17.5Z"
+                                                    fill="#1C274C"></path>
+                                            </g>
+                                        </svg>
+                                    </div>
                                 </div>
+                                <div class="text-base text-primary">{{ Auth::user()->name_thai_emp }}</div>
+                                {{-- <div class="text-base text-primary">{{ Auth::user()->code_emp }}</div> --}}
+                                <div class="divider my-0"></div>
                             </div>
-                            <div class="text-base text-primary">{{ Auth::user()->name_thai_emp }}</div>
-                            <div class="text-base text-primary">{{ Auth::user()->code_emp }}</div>
-                            <div class="divider my-0"></div>
-                        </div>
+                        @endauth
                         <li>
                             <a class="btn btn-ghost text-base text-primary mx-1 hover:text-primary"
                                 href="{{ route('home') }}">หน้าหลัก</a>
@@ -71,7 +74,8 @@
                                 <div class="divider"></div>
                             </div>
                             <div class="flex-none text-center">
-                                <a class="btn bg-red-500 text-gray-100 hover:bg-red-600" href="{{ route('logout') }}">ออกจากระบบ</a>
+                                <a class="btn bg-red-500 text-gray-100 hover:bg-red-600"
+                                    href="{{ route('logout') }}">ออกจากระบบ</a>
                             </div>
                         @endauth
                         {{-- <li><a>Sidebar Item 2</a></li> --}}
@@ -80,11 +84,11 @@
             </div>
 
             {{-- logo --}}
-            <a class="btn btn-ghost text-xl text-gray-100 mx-1 hover:text-primary">{{ config('app.name') }}</a>
+            <a class="btn  text-xl text-neutral bg-transparent border-neutral mx-5" href="{{ route('home') }}">{{ config('app.name') }}</a>
 
             {{-- Menu Desktop --}}
             <a class="btn btn-ghost text-base text-gray-100 mx-1 hover:text-primary hidden lg:flex"
-                href="#">หน้าหลัก</a>
+                href="{{ route('home') }}">หน้าหลัก</a>
             @auth
                 <a class="btn btn-ghost text-base text-gray-100 mx-1 hover:text-primary hidden lg:flex"
                     href="#">รายการจองของฉัน</a>
@@ -93,7 +97,7 @@
 
         <div class="navbar-end">
             @guest
-                <a class="btn btn-ghost" href="{{ route('login') }}">เข้าสู่ระบบ</a>
+                <a class="btn btn-neutral" href="{{ route('login') }}">เข้าสู่ระบบ</a>
             @endguest
             {{-- User profile on Desktop --}}
             @auth
@@ -121,7 +125,8 @@
                             @can('is-admin')
                                 <li class="py-1"><a class="text-base text-primary">การจัดการ</a></li>
                             @endcan
-                            <li class="py-1"><a class="text-base text-gray-100 bg-red-500" href="{{ route('logout') }}">ออกจากระบบ</a></li>
+                            <li class="py-1"><a class="text-base text-gray-100 bg-red-500 hover:bg-red-700"
+                                    href="{{ route('logout') }}">ออกจากระบบ</a></li>
                         </ul>
                     </div>
                 </div>
