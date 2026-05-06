@@ -68,7 +68,7 @@
                                 @can('is-admin')
                                     <li class="flex-1">
                                         <a class="btn btn-ghost text-base text-primary mx-1 hover:text-primary"
-                                            href="{{ route('manage') }}">การจัดการ</a>
+                                            href="{{ route('manage') }}">Admin Panel</a>
                                     </li>
                                 @endcan
                                 <div class="divider"></div>
@@ -123,7 +123,7 @@
                             <li class="text-base text-primary text-center font-bold">{{ Auth::user()->name_thai_emp }}</li>
                             <div class="divider my-0"></div>
                             @can('is-admin')
-                                <li class="py-1"><a class="text-base text-primary">การจัดการ</a></li>
+                                <li class="py-1"><a class="text-base text-primary" href="{{ route('manage') }}">Admin Panel</a></li>
                             @endcan
                             <li class="py-1"><a class="text-base text-gray-100 bg-red-500 hover:bg-red-700"
                                     href="{{ route('logout') }}">ออกจากระบบ</a></li>
@@ -137,6 +137,7 @@
     {{-- Content --}}
     <main class="flex-1">
         <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        {{-- <div class="mx-auto max-w-full px-4 py-6 sm:px-6 lg:px-8"> --}}
             <div class="flex justify-center items-center">
                 {{ $slot }}
             </div>

@@ -1,3 +1,5 @@
-<x-app-layout title="จัดการ">
-    <h1>จัดการ</h1>
-</x-app-layout>
+ <x-admin-layout>
+     <x-slot name="AdminContent">
+       
+     </x-slot>
+ </x-admin-layout>
