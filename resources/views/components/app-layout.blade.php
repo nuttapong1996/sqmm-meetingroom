@@ -20,8 +20,7 @@
             {{-- Mobile Menu --}}
             <div class="drawer w-10 lg:hidden">
                 <input id="my-drawer-1" type="checkbox" class="drawer-toggle" />
-                <label for="my-drawer-1"
-                    class="btn btn-accent">
+                <label for="my-drawer-1" class="btn btn-accent">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-5" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -84,7 +83,8 @@
             </div>
 
             {{-- logo --}}
-            <a class="btn  text-xl text-neutral bg-transparent border-neutral mx-5" href="{{ route('home') }}">{{ config('app.name') }}</a>
+            <a class="btn  text-xl text-neutral bg-transparent border-neutral mx-5"
+                href="{{ route('home') }}">{{ config('app.name') }}</a>
 
             {{-- Menu Desktop --}}
             <a class="btn btn-ghost text-base text-gray-100 mx-1 hover:text-primary hidden lg:flex"
@@ -123,7 +123,8 @@
                             <li class="text-base text-primary text-center font-bold">{{ Auth::user()->name_thai_emp }}</li>
                             <div class="divider my-0"></div>
                             @can('is-admin')
-                                <li class="py-1"><a class="text-base text-primary" href="{{ route('manage') }}">Admin Panel</a></li>
+                                <li class="py-1"><a class="text-base text-primary" href="{{ route('manage') }}">Admin
+                                        Panel</a></li>
                             @endcan
                             <li class="py-1"><a class="text-base text-gray-100 bg-red-500 hover:bg-red-700"
                                     href="{{ route('logout') }}">ออกจากระบบ</a></li>
@@ -137,7 +138,7 @@
     {{-- Content --}}
     <main class="flex-1">
         <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        {{-- <div class="mx-auto max-w-full px-4 py-6 sm:px-6 lg:px-8"> --}}
+            {{-- <div class="mx-auto max-w-full px-4 py-6 sm:px-6 lg:px-8"> --}}
             <div class="flex justify-center items-center">
                 {{ $slot }}
             </div>
@@ -150,6 +151,7 @@
             <p>พัฒนาโดยแผนกสารสนเทศ บมจ.สหกลอิควิปเมนท์ (แม่เมาะ)</p>
         </aside>
     </footer>
+    @include('sweetalert::alert')
 </body>
 
 </html>

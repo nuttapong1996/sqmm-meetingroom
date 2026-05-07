@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\room;
+use App\Models\Room;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class RoomController extends Controller
 {
@@ -15,15 +16,17 @@ class RoomController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
+        $limit = $request->input('limit', 5);
 
-        $room = room::query()->when($search, function ($query, $search) {
+        $rooms = Room::query()->when($search, function ($query, $search) {
             return $query->where('name', 'like', "%{$search}%");
-        })->orderBy('id', 'desc')
-            ->paginate(10)
+        })->orderBy('id', 'asc')
+            ->paginate($limit)
             ->withQueryString();
 
-        return view('manage.rooms', compact('search', 'room'));
+        return view('manage.rooms', compact('search', 'rooms'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -60,7 +63,7 @@ class RoomController extends Controller
 
 
             // Create new name: filename_timestamp.extension
-            $newFileName = $request['roomName']. '_' . time() . '.' . $image->getClientOriginalExtension();
+            $newFileName = $request['roomName'] . '_' . time() . '.' . $image->getClientOriginalExtension();
 
 
             $path = $request->file('roomPic')->storeAs('rooms', $newFileName, 'public');
@@ -69,13 +72,13 @@ class RoomController extends Controller
         }
 
 
-        room::create([
+        Room::create([
             'name' => $request['roomName'],
             'pic' => $path,
             'color' => $request['roomColor']
         ]);
-
-        return redirect()->route('manage.room');
+        Alert::success('เพิ่มข้อมูลสำเร็จ' , 'เพิ่มห้องประชุมแล้ว');
+        return redirect()->route('room.index');
     }
 
     /**
@@ -105,8 +108,11 @@ class RoomController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(room $room)
+    public function destroy(Request $request)
     {
-        //
+        room::destroy($request['id']);
+        
+        Alert::success('ลบข้อมูลสำเร็จ', 'ข้อมูลห้องถูกลบออกจากระบบแล้ว');
+        return redirect()->route('room.index');
     }
 }

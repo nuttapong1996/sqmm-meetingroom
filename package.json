@@ -16,6 +16,7 @@
         "vite": "^7.0.7"
     },
     "dependencies": {
-        "@tailwindplus/elements": "^1.0.22"
+        "@tailwindplus/elements": "^1.0.22",
+        "sweetalert2": "^11.26.24"
     }
 }
