@@ -3,7 +3,7 @@
         <div class="flex flex-col">
             {{-- Table Nav (div1) --}}
             <div class="navbar rounded-2xl p-3 bg-base-100 shadow-sm  flex flex-col lg:flex-row justify-between ">
-                {{-- <div> --}}
+
                 <form class="join" method="GET" action="{{ route('room.index') }}">
                     <label class="input join-item">
                         <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -21,7 +21,6 @@
                     @endif
                 </form>
 
-                {{-- </div> --}}
                 <a class="btn btn-success flex-nowrap mt-3 lg:mt-0" href="{{ route('room.create') }}">
                     <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -60,7 +59,7 @@
                                     <td class="text-base">{{ $room['name'] }}</td>
                                     <td class="text-base"><span class="badge px-5"
                                             style="background-color:{{ $room['color'] }}"></span></td>
-                                    <td><a class="btn btn-primary" href="#{{ $room['id'] }}">แก้ไข</a></td>
+                                    <td><a class="btn btn-primary" href="{{ route('room.edit' , $room['id']) }}">แก้ไข</a></td>
                                     <td class="w-20">
                                         <form action="{{ route('room.remove', $room['id']) }}" method="POST"
                                             class="inline">
@@ -113,7 +112,8 @@
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#ef4444',
-                    confirmButtonText: 'ใช่, ลบเลย!'
+                    confirmButtonText: 'ใช่, ลบเลย!',
+                    cancelButtonText: 'ยกเลิก'
                 }).then((result) => {
                     if (result.isConfirmed) form.submit();
                 });
