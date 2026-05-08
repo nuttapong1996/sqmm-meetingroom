@@ -92,6 +92,8 @@
             @auth
                 <a class="btn btn-ghost text-base text-gray-100 mx-1 hover:text-primary hidden lg:flex"
                     href="#">รายการจองของฉัน</a>
+                <a class="btn btn-secondary text-base  mx-1 hover:text-primary hidden lg:flex"
+                    href="{{ route('book') }}">จองห้องประชุม</a>
             @endauth
         </div>
 

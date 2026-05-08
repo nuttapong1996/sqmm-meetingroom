@@ -20,7 +20,7 @@ class MeetingController extends Controller
      */
     public function create()
     {
-        //
+        return view('meeting.create');
     }
 
     /**

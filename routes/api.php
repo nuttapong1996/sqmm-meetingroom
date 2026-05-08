@@ -21,3 +21,5 @@ Route::get('/meetings', function (Request $request) {
         ];
     });
 });
+
+

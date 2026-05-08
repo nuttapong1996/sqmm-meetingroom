@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminDashboard;
 use App\Http\Controllers\CheckEmployee;
+use App\Http\Controllers\MeetingController;
 use App\Http\Controllers\RoomController;
 use Illuminate\Support\Facades\Route;
 
@@ -12,6 +13,8 @@ Route::get('/', function () {
 Route::get('login', [CheckEmployee::class, 'index'])->middleware('guest')->name('login');
 Route::post('login', [CheckEmployee::class, 'login'])->name('check-emp');
 Route::get('logout', [CheckEmployee::class, 'logout'])->name('logout');
+
+Route::get('book',[MeetingController::class , 'create'])->middleware('auth')->name('book');
 
 Route::get('admin', [AdminDashboard::class , 'index'])->middleware('admin')->name('admin');
 Route::get('admin/rooms', [RoomController::class, 'index'])->middleware('admin')->name('room.index');
