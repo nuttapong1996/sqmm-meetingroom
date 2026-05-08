@@ -14,7 +14,7 @@ class AdminDashboard extends Controller
     {
         $roomTotal = room::count();
 
-        return view('manage.home' , compact('roomTotal'));
+        return view('admin.home' , compact('roomTotal'));
     }
 
     /**

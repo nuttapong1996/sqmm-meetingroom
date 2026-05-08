@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Foundation\Auth\User as Authenticatable; 
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class Employee extends Authenticatable
@@ -15,4 +15,10 @@ class Employee extends Authenticatable
     protected $keyType = 'string';
     public $timestamps = false;
     public $incrementing = false;
+
+    public function isAdmin(): bool
+    {
+        $adminUser = config('auth.admin_users');
+        return in_array($this->code_emp, $adminUser);
+    }
 }

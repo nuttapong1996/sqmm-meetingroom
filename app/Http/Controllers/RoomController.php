@@ -24,7 +24,7 @@ class RoomController extends Controller
             ->paginate($limit)
             ->withQueryString();
 
-        return view('manage.rooms', compact('search', 'rooms'));
+        return view('admin.room.index', compact('search', 'rooms'));
     }
 
 
@@ -34,7 +34,7 @@ class RoomController extends Controller
     public function create()
     {
 
-        return view('manage.room-create');
+        return view('admin.room.create');
     }
 
     /**

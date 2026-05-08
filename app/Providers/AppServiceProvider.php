@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
     {
        // กำหนดสิทธิ์ชื่อ 'is-admin'
         Gate::define('is-admin', function ($user) {
-            return $user->dept_emp == '888930';
+            return $user->isAdmin();
         });
     }
 }

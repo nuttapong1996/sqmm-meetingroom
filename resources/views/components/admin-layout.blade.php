@@ -5,7 +5,7 @@
         <div class="flex-none w-full">
             <ul class="menu menu-horizontal bg-base-200">
                 <li class="px-2 py-2"><a class="btn btn-accent border-b-indigo-300 shadow"
-                        href="{{ route('manage') }}">Admin Dashboard</a></li>
+                        href="{{ route('admin') }}">Admin Dashboard</a></li>
                 <li class="px-2 py-2"><a class="btn btn-accent border-b-indigo-300 shadow"
                         href="{{ route('room.index') }}">จัดการห้องประชุม</a></li>
                 <li class="px-2 py-2"><a class="btn btn-accent border-b-indigo-300 shadow">จัดการรายการจอง</a></li>

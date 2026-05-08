@@ -17,7 +17,7 @@ class AdminAuthorized
     public function handle(Request $request, Closure $next): Response
     {
 
-        if (Auth::check() && Auth::user()->dept_emp == 888930) {
+        if (Auth::check() && Auth::user()->isAdmin()) {
             return $next($request);
         }
         return redirect('/');

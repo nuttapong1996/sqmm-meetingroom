@@ -63,7 +63,7 @@ return [
     'providers' => [
         'emp' => [
             'driver' => 'eloquent',
-            'model' => App\Models\Employee::class,
+            'model' => App\Models\Employee::class,           
         ],
 
         // 'emp' => [
@@ -105,6 +105,10 @@ return [
         ],
     ],
 
+    
+
+    
+
     /*
     |--------------------------------------------------------------------------
     | Password Confirmation Timeout
@@ -117,5 +121,6 @@ return [
     */
 
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
+    'admin_users' => explode(',', env('ADMIN_USERS', '')),
 
 ];

@@ -14,9 +14,9 @@ Route::post('login', [CheckEmployee::class, 'login'])->name('check-emp');
 Route::get('logout', [CheckEmployee::class, 'logout'])->name('logout');
 
 
-Route::get('manage', [AdminDashboard::class , 'index'])->middleware('admin')->name('manage');
+Route::get('admin', [AdminDashboard::class , 'index'])->middleware('admin')->name('admin');
 
-Route::get('manage/rooms', [RoomController::class, 'index'])->middleware('admin')->name('room.index');
-Route::get('room/create',[RoomController::class , 'create'])->middleware('admin')->name('room.create');
-Route::post('room/create',[RoomController::class,'store'])->middleware('admin')->name('room.store');
-Route::delete('room/remove/{id}',[RoomController::class , 'destroy'])->middleware('admin')->name('room.remove');
+Route::get('admin/rooms', [RoomController::class, 'index'])->middleware('admin')->name('room.index');
+Route::get('admin/room/create',[RoomController::class , 'create'])->middleware('admin')->name('room.create');
+Route::post('admin/room/create',[RoomController::class,'store'])->middleware('admin')->name('room.store');
+Route::delete('admin/room/remove/{id}',[RoomController::class , 'destroy'])->middleware('admin')->name('room.remove');
