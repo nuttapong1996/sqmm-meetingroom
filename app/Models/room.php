@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Room extends Model
 {
@@ -11,4 +12,8 @@ class Room extends Model
         'pic',
         'color',
     ];
+
+  public function Meeting():HasMany{
+    return $this->hasMany(Meeting::class,'room_id');
+  }
 }

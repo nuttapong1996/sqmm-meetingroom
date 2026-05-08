@@ -31,4 +31,8 @@ class Meeting extends Model
     {
         return $this->belongsTo(RoomStatus::class, 'room_status_id');
     }
+
+    public function Room():BelongsTo{
+        return $this->belongsTo(Room::class ,'room_id');
+    }
 }

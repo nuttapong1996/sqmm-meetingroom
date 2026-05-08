@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('meetings', function (Blueprint $table) {
             $table->id();
             $table->string('title' , 255);
+            $table->foreignId('room_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('emp_code' , 20);
             $table->string('dept',30);
             $table->foreignId('room_status_id')->constrained()->nullOnDelete()->cascadeOnUpdate();
