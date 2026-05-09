@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Department;
 use App\Models\Meeting;
+use App\Models\Room;
 use Illuminate\Http\Request;
 
 class MeetingController extends Controller
@@ -20,7 +22,9 @@ class MeetingController extends Controller
      */
     public function create()
     {
-        return view('meeting.create');
+        $depts = Department::skip(1)->get();
+        $rooms = Room::all();
+        return view('meeting.create',compact('rooms' ,'depts'));
     }
 
     /**
@@ -28,7 +32,7 @@ class MeetingController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request);
     }
 
     /**

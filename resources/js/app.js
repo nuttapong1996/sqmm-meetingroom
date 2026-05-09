@@ -3,6 +3,12 @@ import "@tailwindplus/elements";
 import Alpine from "alpinejs";
 import Swal from "sweetalert2";
 
+import flatpickr from "flatpickr";
+import "flatpickr/dist/flatpickr.min.css";
+
+// นำเข้าภาษาไทย
+import { Thai } from "flatpickr/dist/l10n/th.js";
+
 import { Calendar } from "@fullcalendar/core";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
@@ -30,3 +36,13 @@ window.setupCalendar = function () {
         calendar.render();
     }
 };
+
+document.addEventListener("DOMContentLoaded", function () {
+    flatpickr("#date-picker", {
+        locale: Thai, // ใช้ตัวแปร Thai ที่ import มา
+        altInput: true,
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+           altFormat: "j F Y H:i",
+    });
+});

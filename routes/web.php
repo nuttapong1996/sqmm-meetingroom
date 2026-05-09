@@ -15,6 +15,7 @@ Route::post('login', [CheckEmployee::class, 'login'])->name('check-emp');
 Route::get('logout', [CheckEmployee::class, 'logout'])->name('logout');
 
 Route::get('book',[MeetingController::class , 'create'])->middleware('auth')->name('book');
+Route::post('book/store',[MeetingController::class , 'store'])->middleware('auth')->name('book.store');
 
 Route::get('admin', [AdminDashboard::class , 'index'])->middleware('admin')->name('admin');
 Route::get('admin/rooms', [RoomController::class, 'index'])->middleware('admin')->name('room.index');

@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Meeting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
