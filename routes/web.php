@@ -24,3 +24,5 @@ Route::post('admin/room/store',[RoomController::class,'store'])->middleware('adm
 Route::get('admin/room/{room}/edit',[RoomController::class,'edit'])->middleware('admin')->name('room.edit');
 Route::put('admin/room/{room}/update',[RoomController::class,'update'])->middleware('admin')->name('room.update');
 Route::delete('admin/room/{room}/remove/',[RoomController::class , 'destroy'])->middleware('admin')->name('room.remove');
+
+

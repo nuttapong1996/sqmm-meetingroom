@@ -21,9 +21,9 @@ return new class extends Migration
             $table->dateTime('start_time');
             $table->dateTime('end_time');
             $table->boolean('zoom_use');
-            $table->string('link_zoom' , 255);
+            $table->string('link_zoom' , 255)->nullable();
             $table->boolean('audio_system');
-            $table->string('other_equipment' , 255);
+            $table->string('other_equipment' , 255)->nullable();
             $table->timestamps();
         });
     }

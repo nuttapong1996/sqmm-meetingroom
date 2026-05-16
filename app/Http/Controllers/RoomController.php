@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Meeting;
 use App\Models\Room;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -25,6 +27,32 @@ class RoomController extends Controller
             ->withQueryString();
 
         return view('admin.room.index', compact('search', 'rooms'));
+    }
+
+
+    public function getRoomStatus()
+    {
+
+        $now = Carbon::now();
+
+        $rooms = Room::all()->map(function ($room) use ($now) {
+            $currentMeeting = Meeting::where('room_id', $room->id)
+                ->where('start_time', '<=', $now)
+                ->where('end_time', '>=', $now)
+                ->first();
+
+            return [
+                'id' => $room->id,
+                'name' => $room->name,
+                'color' => $room->color,
+                // ถ้ามีข้อมูลแปลว่า "ไม่ว่าง" ถ้าไม่มีแปลว่า "ว่าง (free)"
+                'status' => $currentMeeting ? 'busy' : 'free',
+                // แนบชื่อเรื่องประชุมไปด้วย (ถ้ามี)
+                'meeting_title' => $currentMeeting ? $currentMeeting->title : '-'
+            ];
+        });
+        
+        return response()->json($rooms);
     }
 
 

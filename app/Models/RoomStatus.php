@@ -12,7 +12,7 @@ class RoomStatus extends Model
         'name',
     ];
 
-    public function Meeting():HasMany{
+    public function meeting():HasMany{
         return $this->hasMany(Meeting::class ,'room_status_id');
     }
 }

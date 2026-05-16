@@ -1,0 +1,51 @@
+/* ตั้งค่า FullCalendar เฉพาะตอนดูบนมือถือ (หน้าจอเล็กกว่า 768px) */
+@media (max-width: 767px) {
+
+    /* 1. จับเมนูด้านบน (Toolbar) มาเรียงซ้อนกันเป็นแนวตั้ง (Column) */
+    .fc .fc-toolbar.fc-header-toolbar {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        /* เพิ่มช่องว่างระหว่างปุ่มกับชื่อเดือน */
+        margin-bottom: 1rem !important;
+    }
+
+    /* 2. จัดกลุ่มปุ่มให้อยู่กึ่งกลางหน้าจอ */
+    .fc .fc-toolbar-chunk {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    /* 3. ปรับขนาดฟอนต์ชื่อเดือนให้เล็กลง และอยู่ตรงกลาง */
+    .fc .fc-toolbar-title {
+        font-size: 1.3rem !important;
+        /* ปรับขนาดให้พอดีจอ */
+        text-align: center;
+        line-height: 1.2;
+    }
+
+    /* 4. ลดขนาดปุ่มลงนิดหน่อยให้ดูพอดีกับมือถือ (ตัวเลือกเสริม) */
+    .fc .fc-button {
+        padding: 0.3em 0.6em !important;
+        font-size: 0.9rem !important;
+    }
+
+    /* ทำให้ List View กลืนไปกับพื้นหลัง ลบกรอบออก */
+    .fc-theme-standard .fc-list {
+        border: none !important;
+        /* ลบเส้นขอบนอกสุด */
+    }
+
+    /* เพิ่มระยะห่างให้แต่ละแถวอ่านง่ายขึ้น */
+    .fc-list-event td {
+        padding: 12px 14px !important;
+    }
+
+    /* ปรับสีพื้นหลังของแถบวันที่ (เช่น 16 พฤษภาคม) ให้ดูเด่นขึ้น */
+    .fc-list-day-cushion {
+        background-color: #f3f4f6 !important;
+        /* สีเทาอ่อนๆ ของ Tailwind (bg-gray-100) */
+        padding: 10px 14px !important;
+    }
+}

@@ -141,9 +141,9 @@
     <main class="flex-1">
         <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
             {{-- <div class="mx-auto max-w-full px-4 py-6 sm:px-6 lg:px-8"> --}}
-            <div class="flex justify-center items-center">
+            {{-- <div class="flex justify-center items-center"> --}}
                 {{ $slot }}
-            </div>
+            {{-- </div> --}}
         </div>
     </main>
 

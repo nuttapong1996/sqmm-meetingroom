@@ -13,7 +13,7 @@ class Room extends Model
         'color',
     ];
 
-  public function Meeting():HasMany{
+  public function meeting():HasMany{
     return $this->hasMany(Meeting::class,'room_id');
   }
 }

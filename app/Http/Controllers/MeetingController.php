@@ -6,8 +6,8 @@ use App\Models\Department;
 use App\Models\Meeting;
 use App\Models\Room;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class MeetingController extends Controller
 {
@@ -16,7 +16,41 @@ class MeetingController extends Controller
      */
     public function index()
     {
-        //
+        Meeting::all()->get(
+            [
+                'title',
+                'room_id',
+                'emp_code',
+                'dept',
+                'room_status_id',
+            ]
+        );
+    }
+
+    public function getEvents()
+    {
+        $meeting = Meeting::with(['room' ,'employee' ,'department'])->get();
+
+        $events = $meeting->map(function ($meeting) {
+            return [
+                'id' => $meeting->id,
+                'title' => '[' . ($meeting->room->name ?? 'ไม่ระบุห้อง') . '] ' . $meeting->title,
+                'start' => $meeting->start_time,
+                'end' => $meeting->end_time,
+                'color' => $meeting->Room->color,
+                'extendedProps' => [
+                    'subtitle' => $meeting->title,
+                    'emp'  => $meeting->employee->name_thai_emp,
+                    'dept' => $meeting->department->short_name_deptemp,
+                    'room_name' => $meeting->room->name,
+                    // 'status' => $meeting->room_status_id,
+                    'zoom' => $meeting->zoom_use,
+                    'audio' => $meeting->audio_system,
+                    'other' => $meeting->other_equipment,
+                ]
+            ];
+        });
+        return response()->json($events);
     }
 
     /**
@@ -34,7 +68,6 @@ class MeetingController extends Controller
      */
     public function store(Request $request)
     {
-
         $request->validate(
             [
                 'meetingTitle' => 'required',
@@ -56,28 +89,38 @@ class MeetingController extends Controller
             ]
         );
 
-        // $validator = Validator::make(
-        //     $request->all(),[
-        //         'meetingTitle' => 'required',
-        //         'meetingDept' => 'required',
-        //         'meetingRoom' => 'integer|required',
-        //         'start_date' => "date|required|after_or_equal:date",
-        //         'end_date' => 'date:required|after:start_date',
-        //     ],
-        //     [
-        //         'meetingTitle.required' => 'กรุณากรอกหัวข้อการประชุม',
-        //         'meetingDept.required' => 'การุณาเลือกแผนก/ฝ่าย',
-        //         'meetingRoom.required' => 'กรุณาเลือกห้องประชุม',
-        //         'start_date.required' => 'กรุณาระบุเวลาเริ่มต้น',
-        //         'start_date.after_or_equal' => 'กรุณาระบุเวลาเริ่มต้นให้ถูกต้อง',
-        //         'end_date.required' => 'กรุณาระบุเวลาสิ้นสุด',
-        //         'end_date.after' => 'กรุณาระบุเวลาสิ้นสุดให้ถูกต้อง',
-        //     ]
-        // );
+        $startTime = $request['start_date'];
+        $endTime = $request['end_date'];
+        $roomId = $request['meetingRoom'];
 
-        // if($validator->fails()){
-        //     return back()->with('error',$validator->errors()->all())->withInput();
-        // }
+        // 1.Check สถานะห้องและเวลาที่จอง
+        $checkStatus = Meeting::where('room_id', $roomId)->where(function ($query) use ($startTime, $endTime) {
+            $query->where('start_time', '<', $endTime)->where('end_time', '>', $startTime);
+        })->exists();
+
+        // ถ้ามีการทับซ้อน ให้เด้งกลับไปพร้อมแจ้งเตือน
+        if ($checkStatus) {
+            Alert('จองไม่สำเร็จ', 'ห้องประชุมนี้ถูกจองแล้วในช่วงเวลาดังกล่าว', 'error');
+            return back()->withInput();
+        }
+
+        // 2. บันทึกข้อมูลลงฐานข้อมูล (เมื่อผ่านทุกเงื่อนไข)
+        $meeting = new Meeting();
+        $meeting->title = $request['meetingTitle'];
+        $meeting->room_id = $roomId;
+        $meeting->emp_code = Auth::user()->code_emp;
+        $meeting->dept = $request['meetingDept'];
+        $meeting->room_status_id = 1;
+        $meeting->start_time = $startTime;
+        $meeting->end_time = $endTime;
+        $meeting->zoom_use = $request['zoomUse'] ?? 0;
+        $meeting->audio_system = $request['AudioUse'] ?? 0;
+        $meeting->other_equipment = $request['otherEqm'] ?? null;
+        $meeting->save();
+
+        Alert('จองสำเร็จ', 'จองห้องประชุมเรียบร้อย', 'success');
+
+        return redirect()->route('home');
     }
 
     /**
