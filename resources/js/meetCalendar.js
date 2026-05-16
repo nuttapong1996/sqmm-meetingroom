@@ -1,6 +1,5 @@
 import { Calendar, formatDate } from "@fullcalendar/core";
 import dayGridPlugin from "@fullcalendar/daygrid";
-// import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
 
 window.setupCalendar = function () {
@@ -27,7 +26,6 @@ window.setupCalendar = function () {
                     displayEventTime: false,
                 },
                 listMonth: {
-                    locale: "th",
                     eventTimeFormat: {
                         hour: "numeric",
                         minute: "2-digit",
@@ -35,7 +33,13 @@ window.setupCalendar = function () {
                     },
                 },
             },
+            buttonText: {
+                today: "วันนี้", // Overrides the "today" button
+                month: "เดือน", 
+                list : 'รายการ'// Overrides the "month" view button
+            },
             locale: "th",
+            themeSystem : "cosmo",
             editable: false,
             events: eventsUrl,
             eventDisplay: "block",

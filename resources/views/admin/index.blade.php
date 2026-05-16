@@ -10,7 +10,7 @@
 
                  <div class="stat place-items-center">
                      <div class="stat-title">รายการจองทั้งหมด</div>
-                     <div class="stat-value text-secondary">4,200</div>
+                     <div class="stat-value text-secondary">{{ $meetingTotal }}</div>
                      <div class="stat-desc text-secondary">รายการ</div>
                  </div>
 

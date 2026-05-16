@@ -49,3 +49,48 @@
         padding: 10px 14px !important;
     }
 }
+
+    /* 1. เปลี่ยนสีปุ่มเมนูด้านบน (ปุ่ม Today, Prev, Next, Month, List) */
+    :root {
+        /* สีปุ่มปกติ (ใช้สีน้ำเงินเข้มตามรูปของคุณ) */
+        --fc-button-bg-color: #2F2982; 
+        --fc-button-border-color: #2F2982;
+        
+        /* สีปุ่มตอนเอาเมาส์ชี้ หรือตอนกดคลิก */
+        --fc-button-hover-bg-color: #18154b;
+        --fc-button-hover-border-color: #18154b;
+        --fc-button-active-bg-color: #18154b;
+        --fc-button-active-border-color: #18154b;
+
+        /* สีแถบ Event ที่อยู่ในปฏิทิน (สีเริ่มต้น) */
+        --fc-event-bg-color: #ea580c; /* สีส้ม */
+        --fc-event-border-color: #ea580c;
+        
+        /* สีของเส้นขอบตาราง (ทำให้จางลงเพื่อให้ดูทันสมัย) */
+        --fc-border-color: #e5e7eb;
+        
+        /* สีพื้นหลังของช่องวันที่ถูกเลือกหรือเป็นวันปัจจุบัน */
+        --fc-highlight-color: rgba(234, 88, 12, 0.1); /* สีส้มใสๆ */
+        --fc-today-bg-color: rgba(234, 88, 12, 0.05);
+    }
+    .fc-toolbar-title{
+        color: #2F2982;
+    }
+    /* 🎯 2. ปรับแต่งส่วนหัวของวันในสัปดาห์ (จันทร์, อังคาร...) ให้ดูเป็นหัวตารางที่ชัดเจนขึ้น */
+    .fc-theme-standard th {
+        background-color: #f3f4f6; /*สีเทาอ่อน (Tailwind bg-gray-100) */
+        padding: 5px 0 !important;
+        font-weight: 600;
+        color: #18154b; /* สีอักษรเข้มขึ้น */
+    }
+    .fc-list-table th{
+        background-color: #f3f4f6 !important; 
+    }
+
+    /* 🎯 3. โค้งมนให้เข้ากับ Tailwind (Rounded corners) */
+    .fc .fc-button {
+        text-transform: capitalize;
+    }
+    .fc-theme-standard, .fc-theme-standard .fc-scrollgrid {
+        overflow: hidden; /* ทำให้ขอบตารางโค้งเนียนกริบ */
+    }

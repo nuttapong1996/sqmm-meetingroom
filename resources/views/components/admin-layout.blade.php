@@ -7,8 +7,8 @@
                 <li class="px-2 py-2"><a class="btn btn-accent border-b-indigo-300 shadow"
                         href="{{ route('admin') }}">Admin Dashboard</a></li>
                 <li class="px-2 py-2"><a class="btn btn-accent border-b-indigo-300 shadow"
-                        href="{{ route('room.index') }}">จัดการห้องประชุม</a></li>
-                <li class="px-2 py-2"><a class="btn btn-accent border-b-indigo-300 shadow">จัดการรายการจอง</a></li>
+                        href="{{ route('room.index') }}">ห้องประชุม</a></li>
+                <li class="px-2 py-2"><a class="btn btn-accent border-b-indigo-300 shadow">รายการจอง</a></li>
             </ul>
         </div>
         <div class="text-xl font-black text-primary px-4">{{ $title }}</div>

@@ -31,8 +31,10 @@
                     <label for="my-drawer-1" aria-label="close sidebar" class="drawer-overlay"></label>
 
                     <ul class="menu flex flex-col bg-base-200 min-h-full w-80 p-4">
+                        <a class="btn text-xl text-gray-50 bg-neutral mx-5"
+                            href="{{ route('home') }}">{{ config('app.name') }}</a>
                         @auth
-                            <div class="text-center">
+                            <div class="text-center mt-5">
                                 <div class="avatar py-3">
                                     <div class="ring-primary ring-offset-base-100 w-10 rounded-full ring-2 ring-offset-2">
                                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -83,7 +85,7 @@
             </div>
 
             {{-- logo --}}
-            <a class="btn  text-xl text-neutral bg-transparent border-neutral mx-5"
+            <a class="hidden lg:flex btn text-xl text-neutral bg-transparent border-neutral mx-5"
                 href="{{ route('home') }}">{{ config('app.name') }}</a>
 
             {{-- Menu Desktop --}}
@@ -103,6 +105,8 @@
             @endguest
             {{-- User profile on Desktop --}}
             @auth
+                <a class="flex btn btn-secondary text-base  mx-1 hover:text-primary lg:hidden"
+                    href="{{ route('book') }}">จองห้องประชุม</a>
                 <div class="flex gap-2 hidden lg:block">
                     <div class="dropdown dropdown-end">
                         <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
@@ -142,7 +146,7 @@
         <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
             {{-- <div class="mx-auto max-w-full px-4 py-6 sm:px-6 lg:px-8"> --}}
             {{-- <div class="flex justify-center items-center"> --}}
-                {{ $slot }}
+            {{ $slot }}
             {{-- </div> --}}
         </div>
     </main>
