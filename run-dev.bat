@@ -20,9 +20,10 @@ echo       LARAVEL ^& VITE RUNNER (By N0MAD)
 echo ==================================================
 echo.
 echo       [1] Start Servers (Laravel ^& Vite)
-echo       [2] Open in Chrome (http://127.0.0.1:8000)
+echo       [2] Start Servers (Laravel Reverb)
+echo       [3] Open in Chrome (http://127.0.0.1:8000)
 echo       [0] Stop All Processes
-echo       [3] Exit Program
+echo       [.] Exit Program
 echo.
 echo ==================================================
 
@@ -39,9 +40,10 @@ if "%choice%"=="" (
 )
 
 if "%choice%"=="1" goto run_server
-if "%choice%"=="2" goto open_chrome
+if "%choice%"=="2" goto run_reverb
+if "%choice%"=="3" goto open_chrome
 if "%choice%"=="0" goto kill_by_port
-if "%choice%"=="3" goto exit_programe
+if "%choice%"=="." goto exit_programe
 
 :: กรณีป้อนค่าอื่นๆ ที่ไม่ใช่ 0,1,2,3 ให้กลับไปหน้าเมนู
 goto menu
@@ -59,6 +61,15 @@ wt -w 0 nt -d . -p "Command Prompt" cmd /c "title LaravelServer && php artisan s
 
 echo.
 echo [OK] Servers are booting up in background tabs.
+timeout /t 2 >nul
+goto menu
+
+:run_reverb
+echo.
+echo Starting Laravel reverb...
+wt -w 0 nt -d . -p "Command Prompt" cmd /c "title Laravel Reverb && php artisan reverb:start & exit" ; focus-tab -t 0
+echo.
+echo [OK] Laravel reverb are booting up in background tabs.
 timeout /t 2 >nul
 goto menu
 
@@ -97,6 +108,7 @@ taskkill /F /T /IM node.exe >nul 2>&1
 
 :: เคลียร์พอร์ตที่ค้างอยู่ (8000 และ 5173)
 for /f "tokens=5" %%a in ('netstat -aon ^| find ":8000" ^| find "LISTENING"') do taskkill /F /T /PID %%a >nul 2>&1
+for /f "tokens=5" %%a in ('netstat -aon ^| find ":8080" ^| find "LISTENING"') do taskkill /F /T /PID %%a >nul 2>&1
 for /f "tokens=5" %%a in ('netstat -aon ^| find ":5173" ^| find "LISTENING"') do taskkill /F /T /PID %%a >nul 2>&1
 
 echo.
