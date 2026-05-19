@@ -110,7 +110,29 @@
                     <!-- ไอคอนกระดิ่ง + ตัวเลข Badge -->
                     <a class="flex btn btn-secondary text-base  mx-1 hover:text-primary lg:hidden"
                         href="{{ route('book') }}">จองห้องประชุม</a>
-
+                    <div class="flex mx-5">
+                        <div class="dropdown dropdown-end">
+                            <div class="btn btn-ghost btn-circle" role="button" tabindex="0">
+                                <svg class="w-6 h-6 text-yellow-600 fill-yellow-500" fill="soild" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9">
+                                    </path>
+                                </svg>
+                                @php
+                                    // $unreadCount = auth()->user()->unreadNotifications->count();
+                                @endphp
+                                <span id="notification-badge" {{-- class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full transform translate-x-1/4 -translate-y-1/4 {{ $unreadCount === 0 ? 'hidden' : '' }}"> --}}
+                                    class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full transform translate-x-1/4 -translate-y-1/4 ">
+                                    {{-- {{ $unreadCount }} --}}
+                                </span>
+                            </div>
+                            <ul tabindex="-1"
+                                class="menu menu-sm dropdown-content bg-base-100 rounded-box  mt-5 w-52 p-2 shadow">
+                                <li class="text-base text-primary text-center font-bold">test noti</li>
+                            </ul>
+                        </div>
+                    </div>
                     <div class="flex gap-2 hidden lg:block">
                         <div class="dropdown dropdown-end">
                             <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
@@ -145,53 +167,32 @@
                 @endauth
             </div>
         </div>
-        <div class="navbar bg-blue-100 min-h-0 h-15">
+        {{-- <div class="navbar bg-blue-100 min-h-0 h-15">
             <div class="navbar-start">
-                <span class="text-1xl mx-10">{{ $title == config('app.name') ? 'หน้าหลัก' : $title }}</span>
+                <span
+                    class="badge badge-primary badge-xl font-bold text-nowrap p-5 lg:mx-5">{{ $title == config('app.name') ? 'หน้าหลัก' : $title }}</span>
             </div>
             <div class="navbar-end">
                 <!-- ไอคอนกระดิ่ง + ตัวเลข Badge -->
-                <div class="flex mx-5">
-                    <div class="dropdown dropdown-end">
-                        <div class="btn btn-ghost btn-circle" role="button" tabindex="0">
-                            <svg class="w-6 h-6 text-yellow-600 fill-yellow-500" fill="soild" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9">
-                                </path>
-                            </svg>
-                            @php
-                                // $unreadCount = auth()->user()->unreadNotifications->count();
-                            @endphp
-                            <span id="notification-badge" {{-- class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full transform translate-x-1/4 -translate-y-1/4 {{ $unreadCount === 0 ? 'hidden' : '' }}"> --}}
-                                class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full transform translate-x-1/4 -translate-y-1/4 ">
-                                {{-- {{ $unreadCount }} --}}
-                            </span>
-                        </div>
-                        <ul tabindex="-1"
-                            class="menu menu-sm dropdown-content bg-base-100 rounded-box  mt-5 w-52 p-2 shadow">
-                            <li class="text-base text-primary text-center font-bold">test noti</li>
-                        </ul>
-                    </div>
-                </div>
+
             </div>
         </div>
-    </div>
+    </div> --}}
 
-    {{-- Content --}}
-    <main class="flex-1">
-        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-            {{ $slot }}
-        </div>
-    </main>
+        {{-- Content --}}
+        <main class="flex-1">
+            <div class="mx-auto max-w-7xl px-4 py-2 sm:px-6 lg:px-8">
+                {{ $slot }}
+            </div>
+        </main>
 
-    {{-- Footer --}}
-    <footer class="footer sm:footer-horizontal footer-center bg-base-300 text-base-content p-4">
-        <aside>
-            <p>พัฒนาโดยแผนกสารสนเทศ บมจ.สหกลอิควิปเมนท์ (แม่เมาะ)</p>
-        </aside>
-    </footer>
-    @include('sweetalert::alert')
+        {{-- Footer --}}
+        <footer class="footer sm:footer-horizontal footer-center bg-base-300 text-base-content p-4">
+            <aside>
+                <p>พัฒนาโดยแผนกสารสนเทศ บมจ.สหกลอิควิปเมนท์ (แม่เมาะ)</p>
+            </aside>
+        </footer>
+        @include('sweetalert::alert')
 </body>
 
 </html>

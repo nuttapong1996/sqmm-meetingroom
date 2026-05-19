@@ -1,11 +1,10 @@
-<x-app-layout>
-    <div class="flex justify-center items-center">
+<x-app-layout title="จองห้องประชุม">
+    <div class="flex flex-col justify-center items-center">
+        <div class="text-2xl font-bold text-primary px-4 py-1 mb-3">จองห้องประชุม</div>
         <fieldset class="fieldset bg-base-100 border-base-300 rounded-box w-xs border p-4 lg:w-lg">
             <!-- เพิ่ม novalidate เพื่อปิดการแจ้งเตือนของเบราว์เซอร์ และให้ Laravel + DaisyUI จัดการแทน -->
             <form action="{{ route('book.store') }}" method="POST" novalidate>
                 @csrf
-                <legend class="fieldset-legend">จองห้องประชุม</legend>
-
                 <!-- 1. หัวข้อการประชุม -->
                 <label class="label text-base mt-2">หัวข้อการประชุม</label>
                 <input name="meetingTitle" id="meetingTitle" type="text"
@@ -93,7 +92,7 @@
                     </fieldset>
                 </div>
 
-                <label class="label text-base mt-3" for="otherEqm">อุปกรณ์อื่นๆ </label>
+                <label class="label text-base mt-3" for="otherEqm">อื่นๆ </label>
                 <input type="text" name="otherEqm" id="otherEqm" class="input w-full" placeholder="โปรดระบุ"
                     value="{{ old('otherEqm') }}">
 

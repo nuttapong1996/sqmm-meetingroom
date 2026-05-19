@@ -18,6 +18,11 @@ Route::get('book',[MeetingController::class , 'create'])->middleware('auth')->na
 Route::post('book/store',[MeetingController::class , 'store'])->middleware('auth')->name('book.store');
 
 Route::get('admin', [AdminDashboard::class , 'index'])->middleware('admin')->name('admin');
+Route::get('admin/meeting/list', [MeetingController::class, 'adminMeetingManage'])->middleware('admin')->name('admin.meeting.list');
+Route::get('admin/zoom/list', [MeetingController::class, 'zoomList'])->middleware('admin')->name('admin.zoom.list');
+Route::get('admin/zoom/create/{id}', [MeetingController::class, 'zoomCreate'])->middleware('admin')->name('admin.zoom.create');
+Route::put('admin/zoom/store/{id}', [MeetingController::class, 'zoomStore'])->middleware('admin')->name('admin.zoom.store');
+Route::put('admin/meetings/cancel/{id}', [MeetingController::class, 'adminCancelMeeting'])->middleware('admin')->name('admin.meeting.cancel');
 Route::get('admin/rooms', [RoomController::class, 'index'])->middleware('admin')->name('room.index');
 Route::get('admin/room/create',[RoomController::class , 'create'])->middleware('admin')->name('room.create');
 Route::post('admin/room/store',[RoomController::class,'store'])->middleware('admin')->name('room.store');

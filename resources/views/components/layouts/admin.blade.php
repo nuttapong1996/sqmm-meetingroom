@@ -3,15 +3,16 @@
 ])
 <x-app-layout title="{{ $title }}">
     <div class="flex flex-col w-full min-h-screen">
-        <div class="text-2xl font-bold text-primary px-4 py-1">Admin Panel</div>
+        {{-- <div class="text-2xl font-bold text-primary px-4 py-1">Admin Panel</div> --}}
         {{-- top --}}
         <div class="flex-none w-full">
             <ul class="menu menu-horizontal bg-base-200">
                 <li class="px-2 py-2"><a class="btn btn-accent border-b-indigo-300 shadow"
-                        href="{{ route('admin') }}">Admin Dashboard</a></li>
+                        href="{{ route('admin') }}">Dashboard</a></li>
                 <li class="px-2 py-2"><a class="btn btn-accent border-b-indigo-300 shadow"
                         href="{{ route('room.index') }}">ห้องประชุม</a></li>
-                <li class="px-2 py-2"><a class="btn btn-accent border-b-indigo-300 shadow">รายการจอง</a></li>
+                <li class="px-2 py-2"><a href="{{ route('admin.meeting.list') }}" class="btn btn-accent border-b-indigo-300 shadow">รายการจอง</a></li>
+                <li class="px-2 py-2"><a href="{{ route('admin.zoom.list') }}" class="btn btn-accent border-b-indigo-300 shadow">รายการร้องขอ Zoom</a></li>
             </ul>
         </div>
         <div class="text-xl font-black text-primary px-4">{{ $title }}</div>

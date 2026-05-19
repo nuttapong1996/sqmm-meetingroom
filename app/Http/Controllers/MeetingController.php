@@ -29,12 +29,12 @@ class MeetingController extends Controller
 
     public function getEvents()
     {
-        $meeting = Meeting::with(['room', 'employee', 'department'])->get();
+        $meeting = Meeting::with(['room', 'employee', 'department'])->where('room_status_id', '=', 1)->get();
 
         $events = $meeting->map(function ($meeting) {
             return [
                 'id' => $meeting->id,
-                'title' => '[' . ($meeting->room->name ?? 'ไม่ระบุห้อง') . '] ' . $meeting->title,
+                'title' => $meeting->title,
                 'start' => $meeting->start_time,
                 'end' => $meeting->end_time,
                 'color' => $meeting->Room->color,
@@ -61,7 +61,7 @@ class MeetingController extends Controller
 
         $meetings = Meeting::query()->when($search, function ($query, $search) {
             return $query->where('title', 'like', "%{$search}%");
-        })->with(['room', 'employee', 'department', 'status'])->orderBy('id', 'asc')->where('emp_code', $empcode)
+        })->with(['room', 'employee', 'department', 'status'])->orderBy('id', 'desc')->where('emp_code', $empcode)
             ->paginate($limit)
             ->withQueryString();
 
@@ -71,6 +71,70 @@ class MeetingController extends Controller
             return http_response_code(404);
         }
         return view('meeting.personal', compact('search', 'meetings'));
+    }
+
+    public function adminMeetingManage(Request $request)
+    {
+        $search = $request->input('search');
+        $limit = $request->input('limit', 5);
+
+        $meetings =  Meeting::query()->when($search, function ($query, $search) {
+            return $query->where('title', 'like', "%{$search}%");
+        })->with(['room', 'employee', 'department', 'status'])->orderBy('id', 'desc')
+            ->paginate($limit)
+            ->withQueryString();
+
+        if (!$meetings) {
+            return http_response_code(404);
+        }
+
+        return view('admin.meeting.list', compact('meetings', 'search'));
+    }
+
+    public function zoomList(Request $request)
+    {
+        $search = $request->input('search');
+        $limit = $request->input('limit', 5);
+
+        $meetings =  Meeting::query()->when($search, function ($query, $search) {
+            return $query->where('title', 'like', "%{$search}%");
+        })->where('zoom_use', 1)->with(['room', 'employee', 'department', 'status'])->orderBy('id', 'desc')
+            ->paginate($limit)
+            ->withQueryString();
+
+        if (!$meetings) {
+            return http_response_code(404);
+        }
+
+        return view('admin.zoom.list', compact('meetings', 'search'));
+    }
+
+    public function zoomCreate(Request $request)
+    {
+        $meeting = Meeting::where('id', $request['id'])->first();
+        return view('admin.zoom.create', compact('meeting'));
+    }
+
+    public function zoomStore(Request $request)
+    {
+
+        $request->validate(
+            [
+                'zoomUrl' => 'required|string',
+            ],
+            [
+                'zoomUrl.required' => 'กรุณากรอกลิงก์ Zoom',
+            ]
+        );
+
+        $ZoomUrl = $request['zoomUrl'];
+        $MeetingID = $request['id'];
+
+        Meeting::where('id', $MeetingID)->update([
+            'link_zoom' => $ZoomUrl
+        ]);
+        Alert::success('สำเร็จ', 'บันทึกลิงก์ Zoom เรียบร้อยแล้ว');
+        return redirect()->route('admin.zoom.list');
     }
 
     /**
@@ -115,7 +179,7 @@ class MeetingController extends Controller
 
         // 1.Check สถานะห้องและเวลาที่จอง
         $checkStatus = Meeting::where('room_id', $roomId)->where(function ($query) use ($startTime, $endTime) {
-            $query->where('start_time', '<', $endTime)->where('end_time', '>', $startTime)->where('room_status_id','=' ,1);
+            $query->where('start_time', '<', $endTime)->where('end_time', '>', $startTime)->where('room_status_id', '=', 1);
         })->exists();
 
         // ถ้ามีการทับซ้อน ให้เด้งกลับไปพร้อมแจ้งเตือน
@@ -143,6 +207,19 @@ class MeetingController extends Controller
         return redirect()->route('home');
     }
 
+
+    public function adminCancelMeeting(Request $request)
+    {
+        $MeetingID = $request['id'];
+
+        Meeting::where('id', $MeetingID)->update([
+            'room_status_id' => 2
+        ]);
+
+        Alert('สำเร็จ', 'ยกเลิกการจองเรียบร้อยแล้ว', 'success');
+
+        return redirect()->route('admin.meeting.list');
+    }
 
     public function cancelMeeting(Request $request)
     {

@@ -1,6 +1,5 @@
-<x-app-layout title="รายการจองของฉัน">
-    <div class="flex flex-col w-full min-h-screen">
-        <div class="text-2xl font-bold text-primary px-4 py-1">รายการจองของฉัน</div>
+<x-admin-layout title="จัดการรายการจองทั้งหมด">
+    <x-slot name="AdminContent">
         <x-table searchRoute='personal.events'>
             <x-slot name="tableContent">
                 <thead>
@@ -27,7 +26,7 @@
                                 @if ($meeting->room_status_id == 2)
                                     <span class="badge bg-red-500 text-white p-5">ยกเลิก</span>
                                 @elseif (now() > $meeting->end_time)
-                                    <span class="badge bg-green-200 p-5">เสร็จสิ้น</span>
+                                    <span class="badge bg-green-300  p-5">เสร็จสิ้น</span>
                                 @elseif (now() >= $meeting->start_time && now() <= $meeting->end_time)
                                     <span class="badge bg-green-400  p-5">กำลังใช้</span>
                                 @elseif ($meeting->room_status_id == 1 && now() < $meeting->start_time)
@@ -59,7 +58,7 @@
                                 @if ($meeting->room_status_id == 2 || now() > $meeting->end_time)
                                     -
                                 @else
-                                    <form action="{{ route('meeting.cancel', $meeting->id) }}" method="POST">
+                                    <form action="{{ route('admin.meeting.cancel', $meeting->id) }}" method="POST">
                                         @csrf
                                         @method('PUT')
                                         <button type="button" class="btn btn-error text-white"
@@ -117,5 +116,5 @@
                 });
             }
         </script>
-    </div>
-</x-app-layout>
+    </x-slot>
+</x-admin-layout>
