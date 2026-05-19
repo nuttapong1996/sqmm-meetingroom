@@ -1,7 +1,7 @@
 <x-app-layout title='ระบบจองห้องประชุม'>
     <div class="flex flex-col">
         <div class="flex-1">
-            <div class="mx-auto max-w-6xl px-4 py-8">
+            <div class="mx-auto max-w-6xl px-4 py-3">
                 <h2 class="text-2xl font-bold mb-4">สถานะห้องประชุม ณ ปัจจุบัน</h2>
                 <div id="room-status-container" data-status="{{ route('api.rooms.status') }}" class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 </div>

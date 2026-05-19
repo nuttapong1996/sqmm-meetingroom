@@ -1,3 +1,6 @@
+@props([
+    'title' => 'title',
+])
 <x-app-layout title="{{ $title }}">
     <div class="flex flex-col w-full min-h-screen">
         <div class="text-2xl font-bold text-primary px-4 py-1">Admin Panel</div>

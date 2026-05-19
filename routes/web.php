@@ -25,4 +25,5 @@ Route::get('admin/room/{room}/edit',[RoomController::class,'edit'])->middleware(
 Route::put('admin/room/{room}/update',[RoomController::class,'update'])->middleware('admin')->name('room.update');
 Route::delete('admin/room/{room}/remove/',[RoomController::class , 'destroy'])->middleware('admin')->name('room.remove');
 
-
+Route::get('/personal/meetings', [MeetingController::class, 'personalMeeting'])->middleware('auth')->name('personal.events');
+Route::put('/meetings/cancel/{id}', [MeetingController::class, 'cancelMeeting'])->middleware('auth')->name('meeting.cancel');

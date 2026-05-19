@@ -23,7 +23,13 @@ class Employee extends Authenticatable
         return in_array($this->code_emp, $adminUser);
     }
 
-    public function meeting():HasMany{
-        return $this->hasMany(Meeting::class ,'emp_code');
+    public function meeting(): HasMany
+    {
+        return $this->hasMany(Meeting::class, 'emp_code');
+    }
+
+    public function receivesBroadcastNotificationsOn(): string
+    {
+        return 'App.Models.Employee.' . $this->code_emp;
     }
 }

@@ -1,0 +1,86 @@
+<x-app-layout title="รายการจองของฉัน">
+    <x-table searchRoute='personal.events'>
+        <x-slot name="tableContent">
+            <thead>
+                <tr class="text-center">
+                    <th>#</th>
+                    <th>หัวข้อ</th>
+                    <th>ห้อง</th>
+                    <th>สถานะ</th>
+                    <th>เริ่มใช้</th>
+                    <th>สิ้นสุด</th>
+                    <th>Zoom</th>
+                    <th>เครื่องเสียง</th>
+                    <th>อื่นๆ</th>
+                    <th>ยกเลิก</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($meetings as $meeting)
+                    <tr class="text-center">
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $meeting->title }}</td>
+                        <td>{{ $meeting->room->name }}</td>
+                        <td>
+                            @if ($meeting->room_status_id == 2)
+                                <span class="badge bg-red-500 text-white p-5">ยกเลิก</span>
+                            @elseif (now() > $meeting->end_time)
+                                <span class="badge bg-green-800 text-white p-5">เสร็จสิ้น</span>
+                            @elseif (now() >= $meeting->start_time && now() <= $meeting->end_time)
+                                <span class="badge bg-green-500 p-5">กำลังใช้</span>
+                            @elseif ($meeting->room_status_id == 1 && now() < $meeting->start_time)
+                                <span class="badge bg-yellow-500 p-5">จองแล้ว</span>
+                            @else
+                                {{ $meeting->status->name ?? 'ไม่ระบุสถานะ' }}
+                            @endif
+                        </td>
+                        <td>
+                            {{ $meeting->start_time->thaidate('d M y') }} <br>
+                            {{ $meeting->start_time->thaidate('H:i') }} น.
+                        </td>
+                        <td>
+                            {{ $meeting->end_time->thaidate('d M y') }} <br>
+                            {{ $meeting->end_time->thaidate('H:i') }} น.
+                        </td>
+                        <td>{!! $meeting->zoom_use == 1 ? '<a href="#" class="btn btn-info">link</a>' : 'ไม่ใช้' !!}</td>
+                        <td>{{ $meeting->audio_system == 1 ? 'ใช้' : 'ไม่ใช้' }}</td>
+                        <td>{{ $meeting->other_equipment }}</td>
+                        <td>
+                            <form action="{{ route('meeting.cancel', $meeting->id) }}" method="POST">
+                                @csrf
+                                @method('PUT')
+                                <button type="button" class="btn btn-error text-white"
+                                    onclick="cancelMeeting(this.form)">ยกเลิก</button>
+                            </form>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td class="text-center px-10 py-10 w-full" colspan="10">
+                            <div class="flex flex-col justify-center items-center gap-2">
+                                <span>ไม่พบข้อมูล</span>
+                            </div>
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </x-slot>
+        <x-slot name="tablePage">
+            {{ $meetings->links() }}
+        </x-slot>
+    </x-table>
+    <script>
+        function cancelMeeting(form) {
+            Swal.fire({
+                title: 'ยืนยันการยกเลิก?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                confirmButtonText: 'ใช่, ยกเลิก!',
+                cancelButtonText: 'ไม่'
+            }).then((result) => {
+                if (result.isConfirmed) form.submit();
+            });
+        }
+    </script>
+</x-app-layout>

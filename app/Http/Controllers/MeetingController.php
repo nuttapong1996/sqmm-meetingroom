@@ -29,7 +29,7 @@ class MeetingController extends Controller
 
     public function getEvents()
     {
-        $meeting = Meeting::with(['room' ,'employee' ,'department'])->get();
+        $meeting = Meeting::with(['room', 'employee', 'department'])->get();
 
         $events = $meeting->map(function ($meeting) {
             return [
@@ -51,6 +51,26 @@ class MeetingController extends Controller
             ];
         });
         return response()->json($events);
+    }
+
+    public function personalMeeting(Request $request)
+    {
+        $search = $request->input('search');
+        $limit = $request->input('limit', 5);
+        $empcode = Auth::user()->code_emp;
+
+        $meetings = Meeting::query()->when($search, function ($query, $search) {
+            return $query->where('title', 'like', "%{$search}%");
+        })->with(['room', 'employee', 'department', 'status'])->orderBy('id', 'asc')->where('emp_code', $empcode)
+            ->paginate($limit)
+            ->withQueryString();
+
+        // $meeting = Meeting::with(['room', 'employee', 'department'])->where('emp_code', $empcode)->get();
+
+        if (!$meetings) {
+            return http_response_code(404);
+        }
+        return view('meeting.personal', compact('search', 'meetings'));
     }
 
     /**
@@ -95,7 +115,7 @@ class MeetingController extends Controller
 
         // 1.Check สถานะห้องและเวลาที่จอง
         $checkStatus = Meeting::where('room_id', $roomId)->where(function ($query) use ($startTime, $endTime) {
-            $query->where('start_time', '<', $endTime)->where('end_time', '>', $startTime);
+            $query->where('start_time', '<', $endTime)->where('end_time', '>', $startTime)->where('room_status_id','=' ,1);
         })->exists();
 
         // ถ้ามีการทับซ้อน ให้เด้งกลับไปพร้อมแจ้งเตือน
@@ -123,35 +143,17 @@ class MeetingController extends Controller
         return redirect()->route('home');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Meeting $meeting)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Meeting $meeting)
+    public function cancelMeeting(Request $request)
     {
-        //
-    }
+        $MeetingID = $request['id'];
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Meeting $meeting)
-    {
-        //
-    }
+        Meeting::where('id', $MeetingID)->update([
+            'room_status_id' => 2
+        ]);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Meeting $meeting)
-    {
-        //
+        Alert('สำเร็จ', 'ยกเลิกการจองเรียบร้อยแล้ว', 'success');
+
+        return redirect()->route('personal.events');
     }
 }
