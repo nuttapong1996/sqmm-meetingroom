@@ -32,4 +32,10 @@ class Employee extends Authenticatable
     {
         return 'App.Models.Employee.' . $this->code_emp;
     }
+
+    public function notifications()
+    {
+        return $this->morphMany(SystemNotification::class, 'notifiable')
+            ->orderBy('created_at', 'desc');
+    }
 }

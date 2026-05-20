@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\NotiController;
 use App\Models\Department;
+use App\Models\Employee;
 use App\Models\Meeting;
 use App\Models\Room;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class MeetingController extends Controller
@@ -118,6 +121,7 @@ class MeetingController extends Controller
     public function zoomStore(Request $request)
     {
 
+
         $request->validate(
             [
                 'zoomUrl' => 'required|string',
@@ -133,7 +137,28 @@ class MeetingController extends Controller
         Meeting::where('id', $MeetingID)->update([
             'link_zoom' => $ZoomUrl
         ]);
+
+        $meeting = Meeting::where('id', $request['id'])->first();
+        // 1. ค้นหา Employee จาก emp_code
+        $requester = Employee::where('code_emp', $meeting->emp_code)->first();
+
+        // 2. เช็คก่อนว่ามีพนักงานคนนี้จริงๆ ค่อยส่งแจ้งเตือน
+        if ($requester) {
+            NotiController::send(
+                $requester, // 👈 ส่งเป็นก้อน Object ของ Employee
+                'Admin ได้เพิ่มลิงก์ Zoom สำหรับห้องประชุมของคุณแล้ว',
+                route('personal.events')
+            );
+
+            DB::table('notifications')
+                ->where('type', 'App\Notifications\RealtimeNotification')
+                ->where('data->meeting_id', $MeetingID) // ค้นหาเจาะจงใน JSON
+                ->update(['read_at' => now()]);
+        }
+
         Alert::success('สำเร็จ', 'บันทึกลิงก์ Zoom เรียบร้อยแล้ว');
+
+
         return redirect()->route('admin.zoom.list');
     }
 
@@ -203,6 +228,12 @@ class MeetingController extends Controller
         $meeting->save();
 
         Alert('จองสำเร็จ', 'จองห้องประชุมเรียบร้อย', 'success');
+
+        if ($meeting->zoom_use == 1) {
+            $adminGroup = config('auth.admin_users', []);
+            $admins = Employee::whereIn('code_emp', $adminGroup)->get();
+            NotiController::send($admins, 'มีผู้ร้องขอ Link Zoom', route('admin.zoom.create', $meeting->id), $meeting->id);
+        }
 
         return redirect()->route('home');
     }

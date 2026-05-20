@@ -15,6 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('type');
             $table->morphs('notifiable');
+            $table->index(['notifiable_type', 'notifiable_id']); // ทำ Index เพื่อให้ค้นหาแจ้งเตือนไวขึ้น
             $table->text('data');
             $table->timestamp('read_at')->nullable();
             $table->timestamps();

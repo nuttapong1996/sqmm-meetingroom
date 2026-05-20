@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminDashboard;
 use App\Http\Controllers\CheckEmployee;
 use App\Http\Controllers\MeetingController;
+use App\Http\Controllers\NotiController;
 use App\Http\Controllers\RoomController;
 use Illuminate\Support\Facades\Route;
 
@@ -32,3 +33,5 @@ Route::delete('admin/room/{room}/remove/',[RoomController::class , 'destroy'])->
 
 Route::get('/personal/meetings', [MeetingController::class, 'personalMeeting'])->middleware('auth')->name('personal.events');
 Route::put('/meetings/cancel/{id}', [MeetingController::class, 'cancelMeeting'])->middleware('auth')->name('meeting.cancel');
+
+Route::get('/send-noti/{empcode}', [NotiController::class, 'sendNoti']);

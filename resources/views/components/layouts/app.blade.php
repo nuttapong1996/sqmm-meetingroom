@@ -9,6 +9,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <!-- เพิ่มบรรทัดนี้ เพื่อให้ JS ไฟล์นอกดึง ID ไปใช้ได้ -->
+    @auth
+        <meta name="user-id" content="{{ Auth::user()->code_emp }}">
+    @endauth
     @googlefonts
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <title>{{ $title }}-{{ config('app.name') }}</title>
@@ -112,24 +117,64 @@
                         href="{{ route('book') }}">จองห้องประชุม</a>
                     <div class="flex mx-5">
                         <div class="dropdown dropdown-end">
-                            <div class="btn btn-ghost btn-circle" role="button" tabindex="0">
-                                <svg class="w-6 h-6 text-yellow-600 fill-yellow-500" fill="soild" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9">
-                                    </path>
-                                </svg>
-                                @php
-                                    // $unreadCount = auth()->user()->unreadNotifications->count();
-                                @endphp
-                                <span id="notification-badge" {{-- class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full transform translate-x-1/4 -translate-y-1/4 {{ $unreadCount === 0 ? 'hidden' : '' }}"> --}}
-                                    class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full transform translate-x-1/4 -translate-y-1/4 ">
-                                    {{-- {{ $unreadCount }} --}}
-                                </span>
+                            <!-- 1. ปุ่มกระดิ่ง (ใช้ Indicator ของ DaisyUI จัดการตัวเลขมุมขวาบน) -->
+                            <div role="button" tabindex="0" class="btn btn-ghost btn-circle">
+                                <div class="indicator">
+                                    <!-- แก้ไข typo: fill="soild" เป็น fill="currentColor" -->
+                                    <svg class="w-6 h-6 text-yellow-400 fill-current" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9">
+                                        </path>
+                                    </svg>
+
+                                    @php
+                                        $unreadCount = Auth::user()->unreadNotifications->count();
+                                    @endphp
+
+                                    <!-- ใช้ badge ของ DaisyUI คู่กับ indicator-item -->
+                                    <span id="notification-badge"
+                                        class="badge badge-sm badge-error indicator-item text-white {{ $unreadCount === 0 ? 'hidden' : '' }}">
+                                        {{ $unreadCount }}
+                                    </span>
+                                </div>
                             </div>
-                            <ul tabindex="-1"
-                                class="menu menu-sm dropdown-content bg-base-100 rounded-box  mt-5 w-52 p-2 shadow">
-                                <li class="text-base text-primary text-center font-bold">test noti</li>
+
+                            <!-- 2. กล่องรายการแจ้งเตือน (ปรับความกว้างเป็น w-72 เพื่อให้ข้อความไม่บีบเกินไป) -->
+                            <ul id="notification-list" tabindex="0"
+                                class="dropdown-content menu z-[50] bg-base-100 rounded-box mt-4 w-72 p-2 shadow-lg border border-base-200">
+
+                                @forelse (Auth::user()->notifications()->limit(5)->get() as $notification)
+                                    @php
+                                        $isUnread = $notification->unread();
+                                        // ใช้สีธีมของ DaisyUI: bg-base-200 (ยังไม่อ่าน) / bg-transparent (อ่านแล้ว)
+                                        $bgClass = $isUnread ? 'bg-base-200 font-bold' : 'text-base-content/70';
+                                    @endphp
+
+                                    <li id="noti-{{ $notification->id }}" class="mb-1">
+                                        <!-- DaisyUI บังคับให้ใช้แท็ก <a> ไว้ใน <li> เพื่อให้ Hover effect ทำงาน -->
+                                        <a href="{{ $notification->data['url'] }}"
+                                            class="{{ $bgClass }} flex items-start gap-3 p-3"
+                                            onclick="markAsRead('{{ $notification->id }}')">
+                                            <span class="text-lg mt-0.5">🔔</span>
+                                            <div class="flex flex-col">
+                                                <!-- whitespace-normal ช่วยให้ข้อความยาวๆ ตัดขึ้นบรรทัดใหม่ได้ในเมนู -->
+                                                <span
+                                                    class="whitespace-normal leading-tight">{{ $notification->data['message'] }}</span>
+                                                <!-- เพิ่มเวลาเข้าไปให้ดูสมบูรณ์ขึ้น (Option) -->
+                                                <span
+                                                    class="text-xs opacity-50 mt-1 font-normal">{{ $notification->created_at->diffForHumans() }}</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                @empty
+                                    <li>
+                                        <span
+                                            class="text-center opacity-50 flex justify-center py-4 cursor-default hover:bg-transparent">
+                                            ไม่มีการแจ้งเตือน
+                                        </span>
+                                    </li>
+                                @endforelse
                             </ul>
                         </div>
                     </div>

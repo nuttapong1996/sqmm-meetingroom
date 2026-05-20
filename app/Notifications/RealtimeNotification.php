@@ -10,8 +10,11 @@ class RealtimeNotification extends Notification
 {
     // use Queueable;
 
+
     public function __construct(
-        public string $message
+        public string $message,
+        public ?string $url = null,
+        public ?string $meeting_id,
     ) {}
 
     // กำหนดช่องทางในการส่ง: ลง Database และ Broadcast ผ่าน WebSocket
@@ -25,7 +28,8 @@ class RealtimeNotification extends Notification
     {
         return [
             'message' => $this->message,
-            'url' => '#',
+            'url' => $this->url ?? '#',
+            'meeting_id' => $this->meeting_id,
         ];
     }
 
@@ -33,7 +37,9 @@ class RealtimeNotification extends Notification
     public function toBroadcast(object $notifiable): BroadcastMessage
     {
         return new BroadcastMessage([
+            'id' => $this->id,
             'message' => $this->message,
+            'url' => $this->url ?? '#',
             'created_at' => now()->diffForHumans(),
         ]);
     }

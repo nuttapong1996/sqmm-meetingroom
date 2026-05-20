@@ -1,6 +1,7 @@
 import "./bootstrap";
 import "./meetCalendar";
 import "./date-picker";
+import "./inapp-noti";
 import "@tailwindplus/elements";
 import Alpine from "alpinejs";
 import Swal from "sweetalert2";
