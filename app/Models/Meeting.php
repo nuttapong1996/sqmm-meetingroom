@@ -44,3 +44,5 @@ class Meeting extends Model
         return $this->belongsTo(Department::class , 'dept');
     }
 }
+
+// TODO : เพิ่ม passcode และ password สำหรับ zoom ใน table meeting 

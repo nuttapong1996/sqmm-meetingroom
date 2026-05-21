@@ -60,3 +60,6 @@
         </div>
     </x-slot>
 </x-admin-layout>
+
+
+{{-- //TODO เพิ่มการรับค่า passcode และ password ของ Zoom --}}

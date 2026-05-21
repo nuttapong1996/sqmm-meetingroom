@@ -287,3 +287,6 @@ class MeetingController extends Controller
         return redirect()->route('personal.events');
     }
 }
+
+
+// TODO : แก้ไข function zoomStore ให้เก็บ passcode และ password ของ Zoom
