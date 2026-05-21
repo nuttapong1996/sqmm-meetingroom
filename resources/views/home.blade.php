@@ -8,7 +8,7 @@
                 </div>
             </div>
         </div>
-        <div class="flex-1">
+        <div class="shrink-0">
             <div class="mx-auto max-w-6xl px-2 py-5 lg:px-8">
                 <h2 class="text-2xl font-bold mb-4">ปฏิทินการจองห้องประชุม</h2>
                 <div class="bg-white p-2 rounded-xl shadow-md">

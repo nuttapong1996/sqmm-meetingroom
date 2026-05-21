@@ -3,7 +3,7 @@
         <div class="text-2xl font-bold text-primary px-4 py-1 mb-3">จองห้องประชุม</div>
         <fieldset class="fieldset bg-base-100 border-base-300 rounded-box w-xs border p-4 lg:w-lg">
             <!-- เพิ่ม novalidate เพื่อปิดการแจ้งเตือนของเบราว์เซอร์ และให้ Laravel + DaisyUI จัดการแทน -->
-            <form action="{{ route('book.store') }}" method="POST" novalidate>
+            <form action="{{ route('meeting.store') }}" method="POST" novalidate>
                 @csrf
                 <!-- 1. หัวข้อการประชุม -->
                 <label class="label text-base mt-2">หัวข้อการประชุม</label>

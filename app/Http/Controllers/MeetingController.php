@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\NotiController;
+use App\Http\Controllers\NotificationController;
 use App\Models\Department;
 use App\Models\Employee;
 use App\Models\Meeting;
 use App\Models\Room;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
+
 
 class MeetingController extends Controller
 {
@@ -144,14 +146,21 @@ class MeetingController extends Controller
 
         // 2. เช็คก่อนว่ามีพนักงานคนนี้จริงๆ ค่อยส่งแจ้งเตือน
         if ($requester) {
-            NotiController::send(
-                $requester, // 👈 ส่งเป็นก้อน Object ของ Employee
-                'Admin ได้เพิ่มลิงก์ Zoom สำหรับห้องประชุมของคุณแล้ว',
-                route('personal.events')
+            NotificationController::send(
+                $requester, // 
+                'Admin ได้เพิ่มลิงก์ Zoom ของ ' . $meeting->title . ' แล้ว',
+                route('meeting.show', $meeting->id),
+                $MeetingID,
+                $meeting->title
             );
+
+            $adminGroup = config('auth.admin_users', []);
+            // $admins = Employee::whereIn('code_emp', $adminGroup)->get();
+            $adminIds = Employee::whereIn('code_emp', $adminGroup)->pluck('code_emp');
 
             DB::table('notifications')
                 ->where('type', 'App\Notifications\RealtimeNotification')
+                ->whereIn('notifiable_id', $adminIds) // ค้นหาเจาะจงใน JSON
                 ->where('data->meeting_id', $MeetingID) // ค้นหาเจาะจงใน JSON
                 ->update(['read_at' => now()]);
         }
@@ -232,10 +241,23 @@ class MeetingController extends Controller
         if ($meeting->zoom_use == 1) {
             $adminGroup = config('auth.admin_users', []);
             $admins = Employee::whereIn('code_emp', $adminGroup)->get();
-            NotiController::send($admins, 'มีผู้ร้องขอ Link Zoom', route('admin.zoom.create', $meeting->id), $meeting->id);
+            NotificationController::send($admins, 'มีผู้ร้องขอ Link Zoom', route('admin.zoom.create', $meeting->id), $meeting->id, $meeting->title);
         }
 
         return redirect()->route('home');
+    }
+
+
+    public function show($id)
+    {
+
+        $meeting = Meeting::findOrFail($id);
+
+        if (Auth::user()->cannot('view', $meeting)) {
+            return redirect()->route('home');
+        }
+
+        return view('meeting.show' , compact('meeting'));
     }
 
 

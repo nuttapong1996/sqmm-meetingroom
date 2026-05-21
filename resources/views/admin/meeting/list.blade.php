@@ -18,7 +18,7 @@
                 </thead>
                 <tbody>
                     @forelse ($meetings as $meeting)
-                        <tr class="text-center">
+                        <tr class="text-center cursor-pointer hover:bg-base-300" onclick="window.location.href='{{ route('meeting.show', $meeting->id) }}'">
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $meeting->title }}</td>
                             <td>{{ $meeting->room->name }}</td>

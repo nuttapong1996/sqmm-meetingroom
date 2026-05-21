@@ -15,6 +15,7 @@ class RealtimeNotification extends Notification
         public string $message,
         public ?string $url = null,
         public ?string $meeting_id,
+        public ?string $meeting_title = null,
     ) {}
 
     // กำหนดช่องทางในการส่ง: ลง Database และ Broadcast ผ่าน WebSocket
@@ -30,6 +31,7 @@ class RealtimeNotification extends Notification
             'message' => $this->message,
             'url' => $this->url ?? '#',
             'meeting_id' => $this->meeting_id,
+            'meeting_title' => $this->meeting_title,
         ];
     }
 
