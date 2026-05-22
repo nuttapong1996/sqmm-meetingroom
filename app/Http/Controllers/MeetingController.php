@@ -119,25 +119,32 @@ class MeetingController extends Controller
         $meeting = Meeting::where('id', $request['id'])->first();
         return view('admin.zoom.create', compact('meeting'));
     }
-
+    
     public function zoomStore(Request $request)
     {
-
-
         $request->validate(
             [
                 'zoomUrl' => 'required|string',
+                'zoomID' => 'required|string',
+                'zoomPasscode' => 'required|string',
+
             ],
             [
                 'zoomUrl.required' => 'กรุณากรอกลิงก์ Zoom',
+                'zoomID.required' => 'กรุณากรอก Meeting ID',
+                'zoomPasscode.required' => 'กรุณากรอก Passcode',
             ]
         );
 
         $ZoomUrl = $request['zoomUrl'];
+        $ZoomID = $request['zoomID'];
+        $ZoomPasscode = $request['zoomPasscode'];
         $MeetingID = $request['id'];
 
         Meeting::where('id', $MeetingID)->update([
-            'link_zoom' => $ZoomUrl
+            'link_zoom' => $ZoomUrl,
+            'zoom_id' => $ZoomID,
+            'passcode_zoom' => $ZoomPasscode
         ]);
 
         $meeting = Meeting::where('id', $request['id'])->first();
@@ -257,7 +264,7 @@ class MeetingController extends Controller
             return redirect()->route('home');
         }
 
-        return view('meeting.show' , compact('meeting'));
+        return view('meeting.show', compact('meeting'));
     }
 
 
@@ -287,6 +294,3 @@ class MeetingController extends Controller
         return redirect()->route('personal.events');
     }
 }
-
-
-// TODO : แก้ไข function zoomStore ให้เก็บ passcode และ password ของ Zoom

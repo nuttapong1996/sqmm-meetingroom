@@ -3,7 +3,6 @@
 use App\Http\Controllers\AdminDashboard;
 use App\Http\Controllers\CheckEmployee;
 use App\Http\Controllers\MeetingController;
-use App\Http\Controllers\NotiController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\RoomController;
 use Illuminate\Support\Facades\Route;

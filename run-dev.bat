@@ -44,6 +44,7 @@ if "%choice%"=="2" goto run_reverb
 if "%choice%"=="3" goto open_chrome
 if "%choice%"=="0" goto kill_by_port
 if "%choice%"=="." goto exit_programe
+if "%choice%"=="123" goto run_all
 
 :: กรณีป้อนค่าอื่นๆ ที่ไม่ใช่ 0,1,2,3 ให้กลับไปหน้าเมนู
 goto menu
@@ -73,6 +74,7 @@ echo [OK] Laravel reverb are booting up in background tabs.
 timeout /t 2 >nul
 goto menu
 
+
 :open_chrome
 echo.
 
@@ -94,6 +96,35 @@ timeout /t 1 >nul
 
 :: เปลี่ยนจาก --app เป็นการเปิด start chrome ปกติ
 
+start chrome "http://127.0.0.1:8000/"
+
+goto menu
+
+
+:run_all
+echo.
+echo Starting Laravel, Vite, Reverb, and opening Chrome...
+
+:: ปิดของเก่าก่อนรันใหม่เพื่อป้องกัน Port ชนกัน
+taskkill /F /IM php.exe >nul 2>&1
+taskkill /F /IM node.exe >nul 2>&1
+
+:: ใช้ Windows Terminal เปิด Tabs ใหม่ 3 Tabs รวด (Serve, Vite, Reverb)
+wt -w 0 nt -d . -p "Command Prompt" cmd /c "title LaravelServer && php artisan serve & exit" ; nt -d . -p "Command Prompt" cmd /c "title ViteServer && npm run dev & exit" ; nt -d . -p "Command Prompt" cmd /c "title Laravel Reverb && php artisan reverb:start & exit" ; focus-tab -t 0
+
+echo [OK] Servers and Reverb are booting up in background tabs.
+
+:: หน่วงเวลา 3 วินาทีรอให้ Server รันเสร็จก่อนเปิดเบราว์เซอร์
+timeout /t 3 >nul
+
+:: ค้นหาและปิด Chrome Tab เดิมที่เชื่อมต่อกับ Port 8000
+for /f "tokens=5" %%a in ('netstat -aon ^| findstr ":8000" ^| findstr "ESTABLISHED"') do (
+    tasklist /FI "PID eq %%a" | findstr /I "chrome.exe" >nul && (
+        taskkill /F /PID %%a >nul 2>&1
+    )
+)
+
+timeout /t 1 >nul
 start chrome "http://127.0.0.1:8000/"
 
 goto menu

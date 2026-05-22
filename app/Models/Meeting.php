@@ -17,6 +17,8 @@ class Meeting extends Model
         'end_time',
         'zoom_use',
         'link_zoom',
+        'zoom_id',
+        'passcode_zoom',
         'audio_system',
         'other_equipment',
 
@@ -44,5 +46,3 @@ class Meeting extends Model
         return $this->belongsTo(Department::class , 'dept');
     }
 }
-
-// TODO : เพิ่ม passcode และ password สำหรับ zoom ใน table meeting 
