@@ -16,19 +16,23 @@
               {{-- <input type="text" placeholder="ค้นหา" name="search"  /> --}}
           </label>
           <button class="btn btn-neutral join-item" type="submit">ค้นหา</button>
-          {{-- <a href="{{ route($searchRoute) }}" class="btn btn-error join-item text-white">ล้าง</a> --}}
-          @if (!empty($search))
-              <a href="{{ route($searchRoute) }}" class="btn btn-error join-item text-white">ล้าง</a>
-          @endif
+          <a href="{{ route($searchRoute) }}" class="btn btn-error  join-item text-white">ล้าง</a>
+          <select class="select join-item" onchange="this.form.submit()" name="status" id="status">
+            <option>สถานะ</option>
+            <option>จองแล้ว</option>
+            <option>กำลังใช้</option>
+            <option>เสร็จสิ้น</option>
+            <option>ยกเลิก</option>
+          </select>
       </form>
   </div>
   {{-- ตาราง --}}
   <div class="mt-5">
-      <div class="overflow-x-auto">
-          <table class="table w-full">
+      {{-- <div class="overflow-x-auto"> --}}
+          <table class="min-w-full block lg:table">
               {{ $tableContent }}
           </table>
-      </div>
+      {{-- </div> --}}
   </div>
   <div class="mt-6 flex flex-col justify-center lg:flex-row lg:justify-between items-center ">
       <div class="flex flex-row items-center">
