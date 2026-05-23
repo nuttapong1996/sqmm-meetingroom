@@ -2,7 +2,8 @@
     <div class="flex flex-col justify-center items-center">
         <div class="mx-auto w-full max-w-2xl p-4">
             <div class="flex flex-col border border-gray-300 rounded-box p-6 mt-3 ">
-                <div class="flex flex-row justify-between items-center">
+                <h2 class="text-xl font-bold">รายละเอียดการประชุม</h2>
+                {{-- <div class="flex flex-row justify-between items-center">
                     <h2 class="text-xl font-bold">รายละเอียดการประชุม</h2>
                     <a class="badge p-5 bg-red-500 text-gray-50 cursor-pointer hover:bg-red-600"
                         onclick="cancelMeeting(this.form)">
@@ -19,7 +20,7 @@
                         </svg>
                         ยกเลิก
                     </a>
-                </div>
+                </div> --}}
                 <ul class="list">
                     <li class="mt-3">
                         <h2 class="text-xl">หัวข้อ : {{ $meeting->title }}</h2>

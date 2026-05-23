@@ -1,9 +1,31 @@
-<x-app-layout title="รายการจองของฉัน">
+<x-app-layout title="รายการจองของฉัน" >
     <div class="flex flex-col w-full min-h-screen p-4 md:p-6 bg-gray-50">
         <div class="text-2xl font-bold text-primary mb-6">รายการจองของฉัน</div>
-        <x-table searchRoute='personal.events'>
-            <x-slot name="tableContent">
-
+        <x-table searchRoute='personal.events' search="{{ $search }}">
+            <x-slot name="searchInput">
+                <div class="mt-3 mb-0 lg:mt-0 mb-3">
+                    <select class="select w-full" onchange="this.form.submit()" name="status" id="status">
+                        <option value="">สถานะ</option>
+                        <option value="1">จองแล้ว</option>
+                        <option value="2">กำลังใช้</option>
+                        <option value="3">เสร็จสิ้น</option>
+                        <option value="4">ยกเลิก</option>
+                    </select>
+                </div>
+                <div class="mt-3 lg:mt-0">
+                    <select class="select w-30" onchange="this.form.submit()" name="zoom_use" id="zoom_use">
+                        <option value="">Zoom</option>
+                        <option value="1">ใช้</option>
+                        <option value="2">ไม่ใช้</option>
+                    </select>
+                    <select class="select w-30" onchange="this.form.submit()" name="audio_system" id="audio_system">
+                        <option value="">เครื่องเสียง</option>
+                        <option value="1">ใช้</option>
+                        <option value="2">ไม่ใช้</option>
+                    </select>
+                </div>
+            </x-slot>
+            <x-slot name="tableContent" >
                 <thead class="hidden lg:table-header-group bg-gray-100 border-b-2 border-gray-200">
                     <tr class="lg:table-row">
                         <th class="lg:table-cell px-4 py-3 text-left font-semibold text-gray-700 w-16">#</th>
@@ -66,7 +88,8 @@
                             <td
                                 class="block lg:table-cell px-4 py-3 border-gray-100 border-b lg:border-none relative pl-32 lg:pl-4 lg:text-center text-sm text-gray-600">
                                 <span class="lg:hidden absolute left-4 top-3 font-semibold text-gray-500">เริ่ม:</span>
-                                {{ $meeting->start_time->thaidate('d M y') }} <span class="hidden lg:inline text-gray-400 mx-1">|</span>
+                                {{ $meeting->start_time->thaidate('d M y') }} <span
+                                    class="hidden lg:inline text-gray-400 mx-1">|</span>
                                 {{ $meeting->start_time->thaidate('H:i') }} น.
                             </td>
 
@@ -74,7 +97,8 @@
                                 class="block lg:table-cell px-4 py-3 border-gray-100 border-b lg:border-none relative pl-32 lg:pl-4 lg:text-center text-sm text-gray-600">
                                 <span
                                     class="lg:hidden absolute left-4 top-3 font-semibold text-gray-500">สิ้นสุด:</span>
-                                {{ $meeting->end_time->thaidate('d M y') }} <span class="hidden lg:inline text-gray-400 mx-1">|</span>
+                                {{ $meeting->end_time->thaidate('d M y') }} <span
+                                    class="hidden lg:inline text-gray-400 mx-1">|</span>
                                 {{ $meeting->end_time->thaidate('H:i') }} น.
                             </td>
 
@@ -120,7 +144,8 @@
                                     <form action="{{ route('admin.meeting.cancel', $meeting->id) }}" method="POST">
                                         @csrf
                                         @method('PUT')
-                                        <button type="button" class="inline-flex justify-center items-center cursor-pointer w-full p-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition shadow-sm"
+                                        <button type="button"
+                                            class="inline-flex justify-center items-center cursor-pointer w-full p-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition shadow-sm"
                                             onclick="cancelMeeting(this.form)">
                                             <svg class="w-5 h-5 text-gray-50 fill-current" viewBox="0 0 32 32"
                                                 version="1.1" xmlns="http://www.w3.org/2000/svg">
@@ -148,7 +173,13 @@
                                             d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4">
                                         </path>
                                     </svg>
-                                    <span>ไม่พบข้อมูลการจอง</span>
+                                    @if ($search)
+                                        <span> ไม่พบข้อมูลการจองที่ตรงกับคำค้นหา "{{ $search }}"</span>
+                                        <a href="{{ route('personal.events') }}"
+                                            class="btn btn-soft btn-error mt-3">ล้าง</a>
+                                    @else
+                                        <span>ไม่พบข้อมูลการจอง</span>
+                                    @endif
                                 </div>
                             </td>
                         </tr>

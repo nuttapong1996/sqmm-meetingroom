@@ -64,6 +64,14 @@ class MeetingController extends Controller
         $limit = $request->input('limit', 5);
         $empcode = Auth::user()->code_emp;
 
+        $sort = $request['sort'];
+
+        $status = $request['status'];
+
+        $zoom_use = $request['zoom_use'];
+
+        $audio_system = $request['audio_system'];
+
         $meetings = Meeting::query()->when($search, function ($query, $search) {
             return $query->where('title', 'like', "%{$search}%");
         })->with(['room', 'employee', 'department', 'status'])->orderBy('id', 'desc')->where('emp_code', $empcode)
@@ -80,18 +88,26 @@ class MeetingController extends Controller
 
     public function adminMeetingManage(Request $request)
     {
-        $search = $request->input('search');
+        $search = $request->input('search', '');
+
         $limit = $request->input('limit', 5);
 
-        $meetings =  Meeting::query()->when($search, function ($query, $search) {
-            return $query->where('title', 'like', "%{$search}%");
-        })->with(['room', 'employee', 'department', 'status'])->orderBy('id', 'desc')
+        $sort = $request->input('sort', 'desc');
+
+        $status = $request->input('status', '');
+
+        $zoom_use = $request->input('zoom_use', '');
+
+        $audio_system = $request->input('audio_system', '');
+
+        $meetings =  Meeting::query()
+            ->when($search, function ($query, $search) {
+                return $query->where('title', 'like', "%{$search}%");
+            })
+            ->with(['room', 'employee', 'department', 'status'])
+            ->orderBy('id', 'desc')
             ->paginate($limit)
             ->withQueryString();
-
-        if (!$meetings) {
-            return http_response_code(404);
-        }
 
         return view('admin.meeting.list', compact('meetings', 'search'));
     }
@@ -119,7 +135,7 @@ class MeetingController extends Controller
         $meeting = Meeting::where('id', $request['id'])->first();
         return view('admin.zoom.create', compact('meeting'));
     }
-    
+
     public function zoomStore(Request $request)
     {
         $request->validate(
