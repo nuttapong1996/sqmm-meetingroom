@@ -1,31 +1,43 @@
-<x-app-layout title="รายการจองของฉัน" >
+<x-app-layout title="รายการจองของฉัน">
     <div class="flex flex-col w-full min-h-screen p-4 md:p-6 bg-gray-50">
         <div class="text-2xl font-bold text-primary mb-6">รายการจองของฉัน</div>
         <x-table searchRoute='personal.events' search="{{ $search }}">
             <x-slot name="searchInput">
-                <div class="mt-3 mb-0 lg:mt-0 mb-3">
-                    <select class="select w-full" onchange="this.form.submit()" name="status" id="status">
-                        <option value="">สถานะ</option>
-                        <option value="1">จองแล้ว</option>
-                        <option value="2">กำลังใช้</option>
-                        <option value="3">เสร็จสิ้น</option>
-                        <option value="4">ยกเลิก</option>
+                <input type="hidden" name="limit" value="{{ request('limit', 5) }}">
+                <div class="join w-full mb-3 mx-2 md:mt-0">
+                    <label class="input join-item w-auto" for="status">สถานะ : </label>
+                    <select class="select joint-item rounded-r-full" onchange="this.form.submit()" name="status"
+                        id="status">
+                        <option value="">all</option>
+                        <option value="1" @selected(request('status') == '1')><span
+                                class="badge bg-amber-100 text-amber-800 font-bold">จองแล้ว</span></option>
+                        <option value="2" @selected(request('status') == '2')><span
+                                class="badge bg-red-100 text-red-800 font-bold">ยกเลิก</span></option>
+                        <option value="3" @selected(request('status') == '3')><span
+                                class="badge bg-green-100 text-green-800 font-bold">กำลังใช้</span></option>
+                        <option value="4" @selected(request('status') == '4')><span
+                                class="badge bg-gray-100 text-gray-800 font-bold">เสร็จสิ้น</span></option>
                     </select>
                 </div>
-                <div class="mt-3 lg:mt-0">
-                    <select class="select w-30" onchange="this.form.submit()" name="zoom_use" id="zoom_use">
-                        <option value="">Zoom</option>
-                        <option value="1">ใช้</option>
-                        <option value="2">ไม่ใช้</option>
+                <div class="join w-full mb-3 mx-2 md:mt-0">
+                    <label class="input join-item w-auto" for="zoom_use">Zoom: </label>
+                    <select class="select join-item" onchange="this.form.submit()" name="zoom_use" id="zoom_use">
+                        <option value="">all</option>
+                        <option value="1" @selected(request('zoom_use') == '1')>ใช้</option>
+                        <option value="0" @selected(request('zoom_use') == '0')>ไม่ใช้</option>
                     </select>
-                    <select class="select w-30" onchange="this.form.submit()" name="audio_system" id="audio_system">
-                        <option value="">เครื่องเสียง</option>
-                        <option value="1">ใช้</option>
-                        <option value="2">ไม่ใช้</option>
+                </div>
+                <div class="join w-full mb-3 mx-2 md:mt-0">
+                    <label class="input join-item w-auto" for="zoom_use">เครื่องเสียง:</label>
+                    <select class="select join-item" onchange="this.form.submit()" name="audio_system"
+                        id="audio_system">
+                        <option value="">all</option>
+                        <option value="1" @selected(request('audio_system') == '1')>ใช้</option>
+                        <option value="0" @selected(request('audio_system') == '0')>ไม่ใช้</option>
                     </select>
                 </div>
             </x-slot>
-            <x-slot name="tableContent" >
+            <x-slot name="tableContent">
                 <thead class="hidden lg:table-header-group bg-gray-100 border-b-2 border-gray-200">
                     <tr class="lg:table-row">
                         <th class="lg:table-cell px-4 py-3 text-left font-semibold text-gray-700 w-16">#</th>
@@ -40,30 +52,25 @@
                         <th class="lg:table-cell px-4 py-3 text-center font-semibold text-gray-700 w-24">ยกเลิก</th>
                     </tr>
                 </thead>
-
                 <tbody class="block lg:table-row-group divide-y divide-gray-100">
                     @forelse ($meetings as $meeting)
                         <tr
                             class="block lg:table-row bg-white border border-gray-200 lg:border-none mb-4 lg:mb-0 rounded-lg lg:rounded-none shadow-sm lg:shadow-none hover:bg-gray-50 transition">
-
                             <td
-                                class="block lg:table-cell px-4 py-3 border-gray-100 border-b lg:border-none relative pl-32 lg:pl-4 text-gray-800">
+                                class="hidden lg:table-cell px-4 py-3 border-gray-100 border-b lg:border-none relative pl-32 lg:pl-4 text-gray-800">
                                 <span class="lg:hidden absolute left-4 top-3 font-semibold text-gray-500">ลำดับ:</span>
                                 {{ $loop->iteration }}
                             </td>
-
                             <td
                                 class="block lg:table-cell px-4 py-3 border-gray-100 border-b lg:border-none relative pl-32 lg:pl-4 font-medium text-gray-900">
                                 <span class="lg:hidden absolute left-4 top-3 font-semibold text-gray-500">หัวข้อ:</span>
                                 {{ $meeting->title }}
                             </td>
-
                             <td
                                 class="block lg:table-cell px-4 py-3 border-gray-100 border-b lg:border-none relative pl-32 lg:pl-4 text-gray-600">
                                 <span class="lg:hidden absolute left-4 top-3 font-semibold text-gray-500">ห้อง:</span>
                                 {{ $meeting->room->name }}
                             </td>
-
                             <td
                                 class="block lg:table-cell px-4 py-3 border-gray-100 border-b lg:border-none relative pl-32 lg:pl-4 lg:text-center">
                                 <span class="lg:hidden absolute left-4 top-3 font-semibold text-gray-500">สถานะ:</span>
@@ -84,7 +91,6 @@
                                         class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">{{ $meeting->status->name ?? 'ไม่ระบุสถานะ' }}</span>
                                 @endif
                             </td>
-
                             <td
                                 class="block lg:table-cell px-4 py-3 border-gray-100 border-b lg:border-none relative pl-32 lg:pl-4 lg:text-center text-sm text-gray-600">
                                 <span class="lg:hidden absolute left-4 top-3 font-semibold text-gray-500">เริ่ม:</span>
@@ -92,7 +98,6 @@
                                     class="hidden lg:inline text-gray-400 mx-1">|</span>
                                 {{ $meeting->start_time->thaidate('H:i') }} น.
                             </td>
-
                             <td
                                 class="block lg:table-cell px-4 py-3 border-gray-100 border-b lg:border-none relative pl-32 lg:pl-4 lg:text-center text-sm text-gray-600">
                                 <span
@@ -101,7 +106,6 @@
                                     class="hidden lg:inline text-gray-400 mx-1">|</span>
                                 {{ $meeting->end_time->thaidate('H:i') }} น.
                             </td>
-
                             <td
                                 class="block lg:table-cell px-4 py-3 border-gray-100 border-b lg:border-none relative pl-32 lg:pl-4 lg:text-center">
                                 <span class="lg:hidden absolute left-4 top-3 font-semibold text-gray-500">Zoom:</span>
@@ -111,7 +115,6 @@
                                     <span class="text-gray-400">-</span>
                                 @endif
                             </td>
-
                             <td
                                 class="block lg:table-cell px-4 py-3 border-gray-100 border-b lg:border-none relative pl-32 lg:pl-4 lg:text-center">
                                 <span
@@ -122,7 +125,6 @@
                                     <span class="text-gray-400">-</span>
                                 @endif
                             </td>
-
                             <td class="block lg:table-cell px-4 py-3 relative pl-32 lg:pl-4 lg:text-center">
                                 <span
                                     class="lg:hidden absolute left-4 top-3 font-semibold text-gray-500">รายละเอียด:</span>
@@ -194,6 +196,3 @@
         </x-table>
     </div>
 </x-app-layout>
-
-
-{{-- //TODO  แก้ไขและปรับปรุงตารางรายการจองของฉัน : เพิ่มปุ่มรายละเอียดห้องประชุม , การกรองข้อมูลตามสถานะ ,การข้อใช้งาน Zoom และ เครื่องเสียง --}}

@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Meeting extends Model
 {
+
+// TODO7 meeting-model : เพิ่ม fillable ชื่อ cancel_user
     protected $fillable = [
         'title',
         'emp_code',
@@ -21,7 +23,6 @@ class Meeting extends Model
         'passcode_zoom',
         'audio_system',
         'other_equipment',
-
     ];
 
     protected $casts = [

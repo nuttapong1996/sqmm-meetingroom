@@ -6,34 +6,39 @@
   <div class="navbar rounded-box p-3 bg-base-100 shadow-sm flex flex-col lg:flex-row justify-between ">
       <form class="flex flex-col justify-between items-center w-full lg:flex-row" method="GET"
           action="{{ route($searchRoute) }}">
-          <div class="join">
-              <label class="input join-item">
-                  <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                      <g stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" fill="none"
-                          stroke="currentColor">
-                          <circle cx="11" cy="11" r="8"></circle>
-                          <path d="m21 21-4.3-4.3"></path>
-                      </g>
-                  </svg>
-                  <input class="flex-1 outline-none" type="text" placeholder="ค้นหา" name="search"
-                      value="{{ $search ?? '' }}" />
-              </label>
-              <button class="btn btn-neutral join-item" type="submit">ค้นหา</button>
-          </div>
-          {{-- @if (!empty($search))
-              <span class=" flex flex-col items-center mt-3 lg:mt-0">
-                  <i>ผลการค้นหา "{{ $search }}"</i>
-                  <a href="{{ route('personal.events') }}" class="btn btn-soft btn-error mt-3 lg:mt-0">ล้าง</a>
-              </span>
-          @endif --}}
-          <div class="mt-3 lg:mt-0">
-              <div class="w-full mb-3">
-                  <select name="sort" id="sort" class="select" onchange="this.form.submit()">
-                      <option value="">เรียงตาม</option>
-                      <option value="latest" @selected(request('sort') == 'latest')>ล่าสุด</option>
-                      <option value="oldest" @selected(request('sort') == 'oldest')>เก่าสุด</option>
+
+          {{-- Fixed Search Input --}}
+          <div class="flex flex-1 flex-col justify-between mb-3 lg:flex-row mb-0">
+              {{-- ช่อง Search --}}
+              <div class="join flex-1 mb-3 mx-0 lg:mb-0 mx-3">
+                  <label class="input join-item" for="search">
+                      <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                          <g stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" fill="none"
+                              stroke="currentColor">
+                              <circle cx="11" cy="11" r="8"></circle>
+                              <path d="m21 21-4.3-4.3"></path>
+                          </g>
+                      </svg>
+                      <input class="flex-1 outline-none" type="text" placeholder="ค้นหา" name="search"
+                          value="{{ $search ?? '' }}" />
+                  </label>
+                  <button class="btn btn-neutral join-item" type="submit">ค้นหา</button>
+              </div>
+
+              {{-- ตัวเลือกเรียงลำดับ --}}
+              <div class="join shrink-0 ml-0 mb-3 md:mb-0">
+                  <label class="input join-item w-auto" for="order">เรียงตาม :</label>
+                  <select class="select join-item  rounded-r-full" name="order" id="order"
+                      onchange="this.form.submit()">
+                      {{-- <option value="">-</option> --}}
+                      <option value="desc" @selected(request('order') == 'desc')>ล่าสุด</option>
+                      <option value="asc" @selected(request('order') == 'asc')>เก่าสุด</option>
                   </select>
               </div>
+          </div>
+
+          {{-- Dynamic Seacrh Input --}}
+          <div class="flex flex-1 flex-col justify-center items-center md:flex-row">
               {{ $searchInput }}
           </div>
       </form>
