@@ -62,7 +62,7 @@ class MeetingController extends Controller
     public function personalMeeting(Request $request)
     {
         $search = $request->input('search');
-        $limit = $request->input('limit',5);
+        $limit = $request->input('limit', 5);
         $empcode = Auth::user()->code_emp;
         $order = $request->input('order', 'desc');
         $status = $request->input('status');
@@ -108,7 +108,7 @@ class MeetingController extends Controller
             // เช็ค audio_system 
             ->when($audio_system !== '' && $audio_system !== null && $audio_system !== '*', function ($query) use ($audio_system) {
 
-                
+
                 if ($audio_system === '1' || $audio_system === 1) {
                     $query->where('audio_system', 1);
                 } else if ($audio_system === '0' || $audio_system === 0) {
@@ -125,29 +125,68 @@ class MeetingController extends Controller
 
         return view('meeting.personal', compact('search', 'meetings'));
     }
-    // TODO2 แก้ไข Controller adminMeetingManage
     public function adminMeetingManage(Request $request)
     {
-        $search = $request->input('search', '');
-
+        $search = $request->input('search');
         $limit = $request->input('limit', 5);
-
-        $sort = $request->input('sort', 'desc');
-
-        $status = $request->input('status', '');
-
-        $zoom_use = $request->input('zoom_use', '');
-
-        $audio_system = $request->input('audio_system', '');
+        $empcode = Auth::user()->code_emp;
+        $order = $request->input('order', 'desc');
+        $status = $request->input('status');
+        $zoom_use = $request->input('zoom_use');
+        $audio_system = $request->input('audio_system');
 
         $meetings =  Meeting::query()
+            ->with(['room', 'employee', 'department', 'status'])
+            // ค้นจากผลการค้นหา
             ->when($search, function ($query, $search) {
                 return $query->where('title', 'like', "%{$search}%");
             })
-            ->with(['room', 'employee', 'department', 'status'])
-            ->orderBy('id', 'desc')
+            // ค้นจากสถานะ
+            ->when($status !== '', function ($query) use ($status) {
+
+                if ($status == 1) {
+                    // จองแล้ว
+                    $query->where('room_status_id', 1)->where('start_time', '>', now());
+                    // ยกเลิก
+                } else if ($status == 2) {
+                    $query->where('room_status_id', 2);
+                    // กำลังใช้
+                } else if ($status == 3) {
+                    $query->where('room_status_id', 1)
+                        ->where('start_time', '<=', now())
+                        ->where('end_time', '>=', now());
+                    // เสร็จสิ้น
+                } else if ($status == 4) {
+                    $query->where('room_status_id', 1)
+                        ->where('end_time', '<', now());
+                }
+            })
+            // เช็ค zoom_use 
+            ->when($zoom_use !== '' && $zoom_use !== null && $zoom_use !== '*', function ($query) use ($zoom_use) {
+
+                if ($zoom_use === '1' || $zoom_use === 1) {
+                    $query->where('zoom_use', 1);
+                } else if ($zoom_use === '0' || $zoom_use === 0) {
+                    $query->where('zoom_use', 0);
+                }
+            })
+            // เช็ค audio_system 
+            ->when($audio_system !== '' && $audio_system !== null && $audio_system !== '*', function ($query) use ($audio_system) {
+
+
+                if ($audio_system === '1' || $audio_system === 1) {
+                    $query->where('audio_system', 1);
+                } else if ($audio_system === '0' || $audio_system === 0) {
+                    $query->where('audio_system', 0);
+                }
+            })
+            ->orderBy('id', $order ?? 'desc')
             ->paginate($limit)
             ->withQueryString();
+
+        if (!$meetings) {
+            return http_response_code(404);
+        }
 
         return view('admin.meeting.list', compact('meetings', 'search'));
     }
