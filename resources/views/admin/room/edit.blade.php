@@ -1,4 +1,7 @@
 <x-admin-layout title="แก้ไขห้องประชุม {{ $room->name }}">
+    <x-slot name="breadcrumbs">
+        {{ Breadcrumbs::render('room.edit' , $room->id) }}
+    </x-slot>
     <x-slot name="AdminContent">
         <div class="flex justify-center mt-3">
             <form class="fieldset w-xs lg:w-lg" action="{{ route('room.update' ,$room->id) }}" method="POST" enctype="multipart/form-data">

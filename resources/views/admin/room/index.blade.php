@@ -1,4 +1,7 @@
-<x-admin-layout title="การจัดการห้องประชุม">
+<x-admin-layout title="ห้องประชุมทั้งหมด">
+    <x-slot name="breadcrumbs">
+        {{ Breadcrumbs::render('room.index') }}
+    </x-slot>
     <x-slot name="AdminContent">
         <div class="flex flex-col">
             {{-- Table Nav (div1) --}}

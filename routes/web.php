@@ -43,7 +43,7 @@ Route::middleware('admin')->group(function () {
     Route::get('admin/meeting/list', [MeetingController::class, 'adminMeetingManage'])->name('admin.meeting.list');
     Route::put('admin/meetings/cancel/{id}', [MeetingController::class, 'adminCancelMeeting'])->name('admin.meeting.cancel');
 
-    Route::get('admin/zoom/list', [MeetingController::class, 'zoomList'])->name('admin.zoom.list');
+    Route::get('admin/zoom/list', [MeetingController::class, 'zoomList'])->name('zoom.list');
     Route::get('admin/zoom/create/{id}', [MeetingController::class, 'zoomCreate'])->name('admin.zoom.create');
     Route::put('admin/zoom/store/{id}', [MeetingController::class, 'zoomStore'])->name('admin.zoom.store');
 });

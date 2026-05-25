@@ -1,7 +1,10 @@
 <x-admin-layout title="รายการร้องขอ Zoom">
+    <x-slot name="breadcrumbs">
+        {{ Breadcrumbs::render('zoom.list') }}
+    </x-slot>
     <x-slot name="AdminContent">
         <div class="flex flex-col w-full min-h-screen p-4 md:p-6 bg-gray-50">
-            <x-table searchRoute='admin.zoom.list' search="{{ $search }}">
+            <x-table searchRoute='zoom.list' search="{{ $search }}">
                 <x-slot name="searchInput">
                     <input type="hidden" name="limit" value="{{ request('limit', 5) }}">
                     <div class="join w-full mb-3 mx-2 md:mt-0">
@@ -124,7 +127,7 @@
                                         </svg>
                                         @if ($search)
                                             <span> ไม่พบข้อมูลการจองที่ตรงกับคำค้นหา "{{ $search }}"</span>
-                                            <a href="{{ route('admin.zoom.list') }}"
+                                            <a href="{{ route('zoom.list') }}"
                                                 class="btn btn-soft btn-error mt-3">ล้าง</a>
                                         @else
                                             <span>ไม่พบข้อมูลการจอง</span>

@@ -1,4 +1,7 @@
 <x-admin-layout title="เพิ่มห้องประชุม">
+    <x-slot name="breadcrumbs">
+        {{ Breadcrumbs::render('room.create') }}
+    </x-slot>
     <x-slot name="AdminContent">
         <div class="flex justify-center mt-3">
             <form class="fieldset w-xs lg:w-lg" action="{{ route('room.store') }}" method="POST"

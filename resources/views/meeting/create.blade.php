@@ -1,5 +1,6 @@
 <x-app-layout title="จองห้องประชุม">
     <div class="flex flex-col justify-center items-center">
+        {{ Breadcrumbs::render('meeting.create') }}
         <div class="text-2xl font-bold text-primary px-4 py-1 mb-3">จองห้องประชุม</div>
         <fieldset class="fieldset bg-base-100 border-base-300 rounded-box w-xs border p-4 lg:w-lg">
             <!-- เพิ่ม novalidate เพื่อปิดการแจ้งเตือนของเบราว์เซอร์ และให้ Laravel + DaisyUI จัดการแทน -->

@@ -1,4 +1,7 @@
 <x-admin-layout title="จัดการรายการจองทั้งหมด">
+    <x-slot name="breadcrumbs">
+        {{ Breadcrumbs::render('admin.meeting.list') }}
+    </x-slot>
     <x-slot name="AdminContent">
         <div class="flex flex-col w-full min-h-screen p-4 md:p-6 bg-gray-50">
             <x-table searchRoute='admin.meeting.list' search="{{ $search }}">

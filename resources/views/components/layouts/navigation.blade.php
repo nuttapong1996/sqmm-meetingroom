@@ -55,7 +55,7 @@
                                     @can('is-admin')
                                         <li class="flex-1">
                                             <a class="btn btn-ghost text-base text-primary mx-1 hover:text-primary"
-                                                href="{{ route('admin') }}">Admin Panel</a>
+                                                href="{{ route('admin') }}">แผงควบคุมผู้ดูแล</a>
                                         </li>
                                     @endcan
                                     <div class="divider"></div>
@@ -131,7 +131,7 @@
                                     <li id="noti-{{ $notification->id }}"
                                         class="flex flex-row flex-nowrap justify-between items-center mb-1">
                                         <!-- DaisyUI บังคับให้ใช้แท็ก <a> ไว้ใน <li> เพื่อให้ Hover effect ทำงาน -->
-                                        <a href="{{ $notification->data['url']}}"
+                                        <a href="{{ $notification->data['url'] }}"
                                             class="{{ $bgClass }} flex flex-1 items-start gap-3 p-3"
                                             onclick="markAsRead('{{ $notification->id }}')">
                                             <span class="text-lg mt-0.5">
@@ -205,8 +205,8 @@
                                 </li>
                                 <div class="divider my-0"></div>
                                 @can('is-admin')
-                                    <li class="py-1"><a class="text-base text-primary" href="{{ route('admin') }}">Admin
-                                            Panel</a></li>
+                                    <li class="py-1"><a class="text-base text-primary"
+                                            href="{{ route('admin') }}">แผงควบคุมผู้ดูแล</a></li>
                                 @endcan
                                 <li class="py-1"><a class="text-base text-gray-100 bg-red-500 hover:bg-red-700"
                                         href="{{ route('logout') }}">ออกจากระบบ</a></li>

@@ -1,5 +1,6 @@
 <x-app-layout title="รายการจองของฉัน">
     <div class="flex flex-col w-full min-h-screen p-4 md:p-6 bg-gray-50">
+        {{ Breadcrumbs::render('personal.events') }}
         <div class="text-2xl font-bold text-primary mb-6">รายการจองของฉัน</div>
         <x-table searchRoute='personal.events' search="{{ $search }}">
             <x-slot name="searchInput">
