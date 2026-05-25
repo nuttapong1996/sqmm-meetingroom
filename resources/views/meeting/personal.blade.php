@@ -23,8 +23,8 @@
                     <label class="input join-item w-auto" for="zoom_use">Zoom: </label>
                     <select class="select join-item" onchange="this.form.submit()" name="zoom_use" id="zoom_use">
                         <option value="">all</option>
-                        <option value="1" @selected(request('zoom_use') == '1')>ใช้</option>
-                        <option value="0" @selected(request('zoom_use') == '0')>ไม่ใช้</option>
+                        <option value="1" @selected(request('zoom_use') == '1')>มี</option>
+                        <option value="0" @selected(request('zoom_use') == '0')>ยังไม่มี</option>
                     </select>
                 </div>
                 <div class="join w-full mb-3 mx-2 md:mt-0">
@@ -109,10 +109,13 @@
                             <td
                                 class="block lg:table-cell px-4 py-3 border-gray-100 border-b lg:border-none relative pl-32 lg:pl-4 lg:text-center">
                                 <span class="lg:hidden absolute left-4 top-3 font-semibold text-gray-500">Zoom:</span>
-                                @if ($meeting->zoom_use == 1)
-                                    <span class="text-blue-600 font-semibold">ใช้</span>
-                                @else
-                                    <span class="text-gray-400">-</span>
+                                @if ($meeting->link_zoom == null)
+                                    <span class="text-blue-600 font-semibold">ร้องขอ</span>
+                                @elseif($meeting->link_zoom !== null)
+                                    <a class="cursor-pointer text-green-600 font-bold underline underline-offset-2 "
+                                        onclick="showLinkZoom('{{ $meeting->link_zoom }}', '{{ $meeting->title }}' , '{{ $meeting->zoom_id }}' , '{{ $meeting->passcode_zoom }}')">
+                                        ดูลิงก์
+                                    </a>
                                 @endif
                             </td>
                             <td
@@ -143,7 +146,7 @@
                                 @if ($meeting->room_status_id == 2 || now() > $meeting->end_time)
                                     -
                                 @else
-                                    <form action="{{ route('admin.meeting.cancel', $meeting->id) }}" method="POST">
+                                    <form action="{{ route('meeting.cancel', $meeting->id) }}" method="POST">
                                         @csrf
                                         @method('PUT')
                                         <button type="button"

@@ -1,7 +1,6 @@
 <x-admin-layout title="จัดการรายการจองทั้งหมด">
     <x-slot name="AdminContent">
         <div class="flex flex-col w-full min-h-screen p-4 md:p-6 bg-gray-50">
-            <div class="text-2xl font-bold text-primary mb-6">รายการจองของฉัน</div>
             <x-table searchRoute='admin.meeting.list' search="{{ $search }}">
                 <x-slot name="searchInput">
                     <input type="hidden" name="limit" value="{{ request('limit', 5) }}">

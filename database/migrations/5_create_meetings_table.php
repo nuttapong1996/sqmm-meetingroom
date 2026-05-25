@@ -9,7 +9,6 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    // TODO6 meeting_table : เพิ่ม column cancel_user string(100) สำหรับเก็บชื่อของผู้ยกเลิก
     public function up(): void
     {
         Schema::create('meetings', function (Blueprint $table) {
@@ -27,6 +26,7 @@ return new class extends Migration
             $table->string('passcode_zoom' ,30)->nullable();
             $table->boolean('audio_system');
             $table->string('other_equipment' , 255)->nullable();
+            $table->string('cancel_user' , 100)->nullable();
             $table->timestamps();
         });
     }

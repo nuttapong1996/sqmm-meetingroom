@@ -141,6 +141,10 @@
                         </span>
                     </li>
                 </ul>
+                @if ($meeting->room_status_id == 2)
+                    <i class="text-xs text-right text-gray-500 mt-2">ยกเลิกเมื่อ:
+                        {{ $meeting->updated_at->thaidate('d/m/y H:i') }}น.<br>โดยคุณ {{ $meeting->cancel_user }} </i>
+                @endif
             </div>
             @if ($meeting->zoom_use == 1)
                 <div class="flex flex-row justify-center items-center border border-gray-300 rounded-box p-6 mt-3">

@@ -100,9 +100,9 @@ class MeetingController extends Controller
             ->when($zoom_use !== '' && $zoom_use !== null && $zoom_use !== '*', function ($query) use ($zoom_use) {
 
                 if ($zoom_use === '1' || $zoom_use === 1) {
-                    $query->where('zoom_use', 1);
+                    $query->where('link_zoom', '!=', null);
                 } else if ($zoom_use === '0' || $zoom_use === 0) {
-                    $query->where('zoom_use', 0);
+                    $query->where('link_zoom', null);
                 }
             })
             // เช็ค audio_system 
@@ -129,7 +129,6 @@ class MeetingController extends Controller
     {
         $search = $request->input('search');
         $limit = $request->input('limit', 5);
-        $empcode = Auth::user()->code_emp;
         $order = $request->input('order', 'desc');
         $status = $request->input('status');
         $zoom_use = $request->input('zoom_use');
@@ -143,7 +142,6 @@ class MeetingController extends Controller
             })
             // ค้นจากสถานะ
             ->when($status !== '', function ($query) use ($status) {
-
                 if ($status == 1) {
                     // จองแล้ว
                     $query->where('room_status_id', 1)->where('start_time', '>', now());
@@ -163,7 +161,6 @@ class MeetingController extends Controller
             })
             // เช็ค zoom_use 
             ->when($zoom_use !== '' && $zoom_use !== null && $zoom_use !== '*', function ($query) use ($zoom_use) {
-
                 if ($zoom_use === '1' || $zoom_use === 1) {
                     $query->where('zoom_use', 1);
                 } else if ($zoom_use === '0' || $zoom_use === 0) {
@@ -172,8 +169,6 @@ class MeetingController extends Controller
             })
             // เช็ค audio_system 
             ->when($audio_system !== '' && $audio_system !== null && $audio_system !== '*', function ($query) use ($audio_system) {
-
-
                 if ($audio_system === '1' || $audio_system === 1) {
                     $query->where('audio_system', 1);
                 } else if ($audio_system === '0' || $audio_system === 0) {
@@ -190,18 +185,31 @@ class MeetingController extends Controller
 
         return view('admin.meeting.list', compact('meetings', 'search'));
     }
-    // TODO5 แก้ไช Controller zoomList
     public function zoomList(Request $request)
     {
         $search = $request->input('search');
         $limit = $request->input('limit', 5);
+        $order = $request->input('order', 'desc');
+        $audio_system = $request->input('audio_system');
 
-        $meetings =  Meeting::query()->when($search, function ($query, $search) {
-            return $query->where('title', 'like', "%{$search}%");
-        })->where('zoom_use', 1)->with(['room', 'employee', 'department', 'status'])->orderBy('id', 'desc')
+        $meetings =  Meeting::query()
+            ->with(['room', 'employee', 'department', 'status'])
+            ->where('zoom_use', 1)
+            ->where('room_status_id', 1)
+            ->where('end_time', '>=', now())
+            ->when($search, function ($query, $search) {
+                return $query->where('title', 'like', "%{$search}%");
+            })
+            ->when($audio_system !== '' && $audio_system !== null && $audio_system !== '*', function ($query) use ($audio_system) {
+                if ($audio_system === '1' || $audio_system === 1) {
+                    $query->where('audio_system', 1);
+                } else if ($audio_system === '0' || $audio_system === 0) {
+                    $query->where('audio_system', 0);
+                }
+            })
+            ->orderBy('id', $order ?? 'desc')
             ->paginate($limit)
             ->withQueryString();
-
         if (!$meetings) {
             return http_response_code(404);
         }
@@ -211,7 +219,15 @@ class MeetingController extends Controller
 
     public function zoomCreate(Request $request)
     {
-        $meeting = Meeting::where('id', $request['id'])->first();
+        $meeting = Meeting::where('id', $request['id'])
+            ->where('zoom_use', 1)
+            ->where('room_status_id', 1)
+            ->where('end_time', '>=', now())
+            ->first();
+        if (!$meeting) {
+            Alert('ไม่พบข้อมูล', 'ไม่พบรายการที่ร้องขอ', 'info');
+            return redirect()->route('admin.zoom.list');
+        }
         return view('admin.zoom.create', compact('meeting'));
     }
 
@@ -368,7 +384,8 @@ class MeetingController extends Controller
         $MeetingID = $request['id'];
 
         Meeting::where('id', $MeetingID)->update([
-            'room_status_id' => 2
+            'room_status_id' => 2,
+            'cancel_user' => trim(Auth::user()->name_thai_emp)
         ]);
 
         Alert('สำเร็จ', 'ยกเลิกการจองเรียบร้อยแล้ว', 'success');
@@ -381,7 +398,8 @@ class MeetingController extends Controller
         $MeetingID = $request['id'];
 
         Meeting::where('id', $MeetingID)->update([
-            'room_status_id' => 2
+            'room_status_id' => 2,
+            'cancel_user' => trim(Auth::user()->name_thai_emp)
         ]);
 
         Alert('สำเร็จ', 'ยกเลิกการจองเรียบร้อยแล้ว', 'success');
