@@ -79,6 +79,10 @@
                 @auth
                     <a class="btn btn-ghost text-base text-gray-100 mx-1 hover:text-primary hidden lg:flex"
                         href="{{ route('personal.events') }}">รายการจองของฉัน</a>
+                    @can('is-admin')
+                        <a class="btn btn-ghost text-base text-gray-100 mx-1 hover:text-primary hidden lg:flex"
+                            href="{{ route('admin') }}">แผงควบคุมผู้ดูแล</a>
+                    @endcan
                     <a class="btn btn-secondary text-base  mx-1 hover:text-primary hidden lg:flex"
                         href="{{ route('meeting.create') }}">จองห้องประชุม</a>
                 @endauth
@@ -204,10 +208,6 @@
                                 <li class="text-base text-primary text-center font-bold">{{ Auth::user()->name_thai_emp }}
                                 </li>
                                 <div class="divider my-0"></div>
-                                @can('is-admin')
-                                    <li class="py-1"><a class="text-base text-primary"
-                                            href="{{ route('admin') }}">แผงควบคุมผู้ดูแล</a></li>
-                                @endcan
                                 <li class="py-1"><a class="text-base text-gray-100 bg-red-500 hover:bg-red-700"
                                         href="{{ route('logout') }}">ออกจากระบบ</a></li>
                             </ul>
