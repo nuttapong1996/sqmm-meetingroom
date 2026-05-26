@@ -40,7 +40,8 @@ Route::middleware('admin')->group(function () {
     Route::put('admin/room/{room}/update', [RoomController::class, 'update'])->name('room.update');
     Route::delete('admin/room/{room}/remove/', [RoomController::class, 'destroy'])->name('room.remove');
 
-    Route::get('admin/meeting/list', [MeetingController::class, 'adminMeetingManage'])->name('admin.meeting.list');
+    Route::get('admin/meeting/{id}', [MeetingController::class, 'adminShow'])->name('admin.meeting.show');
+    Route::get('admin/meetings', [MeetingController::class, 'adminMeetingManage'])->name('admin.meeting.list');
     Route::put('admin/meetings/cancel/{id}', [MeetingController::class, 'adminCancelMeeting'])->name('admin.meeting.cancel');
 
     Route::get('admin/zoom/list', [MeetingController::class, 'zoomList'])->name('zoom.list');

@@ -40,21 +40,28 @@ Breadcrumbs::for('room.edit', function (BreadcrumbTrail $trail, $id) {
 });
 
 Breadcrumbs::for('meeting.show', function (BreadcrumbTrail $trail, $id) {
-    if (Auth::user()->is_admin()) {
-        $trail->parent('admin.meeting.list');
-    }else{
-        $trail->parent('personal.events');
-    }
-    $trail->push('แก้ไขห้องประชุม', route('meeting.show', $id));
+    $trail->parent('personal.events');
+    $trail->push('รายละเอียดการประชุม', route('meeting.show', $id));
 });
 
 Breadcrumbs::for('admin.meeting.list', function (BreadcrumbTrail $trail) {
     $trail->parent('admin');
     $trail->push('รายการจองทั้งหมด', route('admin.meeting.list'));
 });
+
+Breadcrumbs::for('admin.meeting.show', function (BreadcrumbTrail $trail, $id) {
+    $trail->parent('admin.meeting.list');
+    $trail->push('รายละเอียดการประชุม', route('admin.meeting.show', $id));
+});
+
 Breadcrumbs::for('zoom.list', function (BreadcrumbTrail $trail) {
     $trail->parent('admin');
     $trail->push('รายการร้องขอ Zoom', route('zoom.list'));
+});
+
+Breadcrumbs::for('admin.zoom.create', function (BreadcrumbTrail $trail, $id) {
+    $trail->parent('zoom.list');
+    $trail->push('สร้าง Link Zoom', route('admin.zoom.create', $id));
 });
 
 

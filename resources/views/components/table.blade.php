@@ -3,46 +3,45 @@
       'search' => '',
   ])
   {{-- Table Nav (div1) --}}
-  <div class="navbar rounded-box p-3 bg-base-100 shadow-sm flex flex-col lg:flex-row justify-between ">
-      <form class="flex flex-col justify-between items-center w-full lg:flex-row" method="GET"
-          action="{{ route($searchRoute) }}">
-
-          {{-- Fixed Search Input --}}
-          <div class="flex flex-1 flex-col justify-between mb-3 lg:flex-row mb-0">
-              {{-- ช่อง Search --}}
-              <div class="join flex-1 mb-3 mx-0 lg:mb-0 mx-3">
-                  <label class="input join-item" for="search">
-                      <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                          <g stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" fill="none"
-                              stroke="currentColor">
-                              <circle cx="11" cy="11" r="8"></circle>
-                              <path d="m21 21-4.3-4.3"></path>
-                          </g>
-                      </svg>
-                      <input class="flex-1 outline-none" type="text" placeholder="ค้นหา" name="search"
-                          value="{{ $search ?? '' }}" />
-                  </label>
-                  <button class="btn btn-neutral join-item" type="submit">ค้นหา</button>
-              </div>
-
+  <form class="flex flex-col w-full" method="GET" action="{{ route($searchRoute) }}">
+      {{-- Fixed Search Input --}}
+      <div class="flex flex-row justify-center w-full lg:justify-start">
+          {{-- ช่อง Search --}}
+          <div class="join w-full">
+              <label class="input w-full join-item" for="search">
+                  <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                      <g stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" fill="none"
+                          stroke="currentColor">
+                          <circle cx="11" cy="11" r="8"></circle>
+                          <path d="m21 21-4.3-4.3"></path>
+                      </g>
+                  </svg>
+                  <input class="input outline-none" type="text" placeholder="ค้นหา" name="search"
+                      value="{{ $search ?? '' }}" />
+              </label>
+              <button class="btn btn-neutral join-item" type="submit">ค้นหา</button>
+          </div>
+      </div>
+      {{-- Dynamic Input --}}
+      <div
+          class="navbar rounded-box mt-3 bg-base-100 shadow-sm flex flex-col lg:flex-row">
+          <div class="navbar-start  w-full justify-center lg:justify-start">
               {{-- ตัวเลือกเรียงลำดับ --}}
-              <div class="join shrink-0 ml-0 mb-3 md:mb-0">
+              <div class="join w-50 mb-3 mx-2 lg:mb-0">
                   <label class="input join-item w-auto" for="order">เรียงตาม :</label>
-                  <select class="select join-item  rounded-r-full" name="order" id="order"
-                      onchange="this.form.submit()">
-                      {{-- <option value="">-</option> --}}
+                  <select class="select join-item " name="order" id="order" onchange="this.form.submit()">
                       <option value="desc" @selected(request('order') == 'desc')>ล่าสุด</option>
                       <option value="asc" @selected(request('order') == 'asc')>เก่าสุด</option>
                   </select>
               </div>
           </div>
-
-          {{-- Dynamic Seacrh Input --}}
-          <div class="flex flex-1 flex-col justify-center items-center md:flex-row">
-              {{ $searchInput }}
+          <div class="navbar-end w-full justify-center lg:justify-end">
+              <div class="flex flex-col lg:flex-row">
+                  {{ $searchInput }}
+              </div>
           </div>
-      </form>
-  </div>
+      </div>
+  </form>
   @if (!empty($search))
       <span class=" flex flex-row items-center mt-3">
           <i class="mr-2">ผลการค้นหา "{{ $search }}"</i>

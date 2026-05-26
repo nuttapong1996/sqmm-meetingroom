@@ -1,7 +1,7 @@
 <x-admin-layout title="สร้าง Link Zoom">
-    {{-- <x-slot name="breadcrumbs">
-
-    </x-slot> --}}
+    <x-slot name="breadcrumbs">
+        {{ Breadcrumbs::render('admin.zoom.create' , $meeting->id) }}
+    </x-slot>
     <x-slot name="AdminContent">
         <div class="flex flex-col justify-center items-center ">
             <div class="card w-96 bg-base-100  shadow-sm">

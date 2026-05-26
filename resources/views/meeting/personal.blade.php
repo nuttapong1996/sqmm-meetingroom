@@ -1,42 +1,49 @@
 <x-app-layout title="รายการจองของฉัน">
+    {{ Breadcrumbs::render('personal.events') }}
     <div class="flex flex-col w-full min-h-screen p-4 md:p-6 bg-gray-50">
-        {{ Breadcrumbs::render('personal.events') }}
         <div class="text-2xl font-bold text-primary mb-6">รายการจองของฉัน</div>
         <x-table searchRoute='personal.events' search="{{ $search }}">
             <x-slot name="searchInput">
                 <input type="hidden" name="limit" value="{{ request('limit', 5) }}">
-                <div class="join w-full mb-3 mx-2 md:mt-0">
-                    <label class="input join-item w-auto" for="status">สถานะ : </label>
-                    <select class="select joint-item rounded-r-full" onchange="this.form.submit()" name="status"
-                        id="status">
-                        <option value="">all</option>
-                        <option value="1" @selected(request('status') == '1')><span
-                                class="badge bg-amber-100 text-amber-800 font-bold">จองแล้ว</span></option>
-                        <option value="2" @selected(request('status') == '2')><span
-                                class="badge bg-red-100 text-red-800 font-bold">ยกเลิก</span></option>
-                        <option value="3" @selected(request('status') == '3')><span
-                                class="badge bg-green-100 text-green-800 font-bold">กำลังใช้</span></option>
-                        <option value="4" @selected(request('status') == '4')><span
-                                class="badge bg-gray-100 text-gray-800 font-bold">เสร็จสิ้น</span></option>
-                    </select>
-                </div>
-                <div class="join w-full mb-3 mx-2 md:mt-0">
-                    <label class="input join-item w-auto" for="zoom_use">Zoom: </label>
-                    <select class="select join-item" onchange="this.form.submit()" name="zoom_use" id="zoom_use">
-                        <option value="">all</option>
-                        <option value="1" @selected(request('zoom_use') == '1')>มี</option>
-                        <option value="0" @selected(request('zoom_use') == '0')>ยังไม่มี</option>
-                    </select>
-                </div>
-                <div class="join w-full mb-3 mx-2 md:mt-0">
-                    <label class="input join-item w-auto" for="zoom_use">เครื่องเสียง:</label>
-                    <select class="select join-item" onchange="this.form.submit()" name="audio_system"
-                        id="audio_system">
-                        <option value="">all</option>
-                        <option value="1" @selected(request('audio_system') == '1')>ใช้</option>
-                        <option value="0" @selected(request('audio_system') == '0')>ไม่ใช้</option>
-                    </select>
-                </div>
+                    <div class="join mb-3 mx-2 lg:mb-0">
+                        <span class="input join-item w-15 flex items-center whitespace-nowrap  bg-gray-50">วันที่:</span>
+                        <input type="text" class="input join-item onlydate-picker"
+                            placeholder="d/m/Y" name="dateSelect" value="{{ request('dateSelect') }}"
+                            onchange="this.form.submit()" />
+                        @if (!empty(request('dateSelect')))
+                            <a href="{{ route('personal.events') }}" class="btn btn-soft btn-error join-item">ล้าง</a>
+                        @endif
+                    </div>
+                    <div class="join mb-3 mx-2 lg:mb-0">
+                        <label class="input join-item flex items-center whitespace-nowrap bg-gray-50 w-15"
+                            for="status">สถานะ:</label>
+                        <select class="select join-item " onchange="this.form.submit()" name="status" id="status">
+                            <option value="">all</option>
+                            <option value="1" @selected(request('status') == '1')>จองแล้ว</option>
+                            <option value="2" @selected(request('status') == '2')>ยกเลิก</option>
+                            <option value="3" @selected(request('status') == '3')>กำลังใช้</option>
+                            <option value="4" @selected(request('status') == '4')>เสร็จสิ้น</option>
+                        </select>
+                    </div>
+                    <div class="join mb-3 mx-2 lg:mb-0">
+                        <label class="input join-item flex items-center whitespace-nowrap bg-gray-50 w-15"
+                            for="zoom_use">Zoom:</label>
+                        <select class="select join-item " onchange="this.form.submit()" name="zoom_use" id="zoom_use">
+                            <option value="">all</option>
+                            <option value="1" @selected(request('zoom_use') == '1')>มี</option>
+                            <option value="0" @selected(request('zoom_use') == '0')>ไม่มี</option>
+                        </select>
+                    </div>
+                    <div class="join mb-3 mx-2 lg:mb-0">
+                        <label class="input join-item flex items-center whitespace-nowrap bg-gray-50 w-21"
+                            for="audio_system">เครื่องเสียง:</label>
+                        <select class="select join-item " onchange="this.form.submit()" name="audio_system"
+                            id="audio_system">
+                            <option value="">all</option>
+                            <option value="1" @selected(request('audio_system') == '1')>ใช้</option>
+                            <option value="0" @selected(request('audio_system') == '0')>ไม่ใช้</option>
+                        </select>
+                    </div>
             </x-slot>
             <x-slot name="tableContent">
                 <thead class="hidden lg:table-header-group bg-gray-100 border-b-2 border-gray-200">

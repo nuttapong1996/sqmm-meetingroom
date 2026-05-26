@@ -1,5 +1,6 @@
 @props([
     'title' => 'title',
+    'titleVisible' =>'block'
 ])
 <x-app-layout title="{{ $title }}">
     <div class="flex flex-col w-full min-h-screen">
@@ -25,7 +26,7 @@
                         href="{{ route('zoom.list') }}">รายการร้องขอ Zoom</a></li>
             </ul>
         </div>
-        <div class="text-xl font-black text-primary px-4">{{ $title }}</div>
+        <div class="{{ $titleVisible }} text-xl font-black text-primary px-4">{{ $title }}</div>
         <div class="divider  m-1"></div>
         {{-- main --}}
         <div class="flex-1 w-full px-4">

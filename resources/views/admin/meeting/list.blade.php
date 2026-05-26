@@ -7,7 +7,16 @@
             <x-table searchRoute='admin.meeting.list' search="{{ $search }}">
                 <x-slot name="searchInput">
                     <input type="hidden" name="limit" value="{{ request('limit', 5) }}">
-                    <div class="join w-full mb-3 mx-2 md:mt-0">
+                    <div class="join mb-3 mx-2 lg:mb-0">
+                        <span
+                            class="input join-item w-15 flex items-center whitespace-nowrap  bg-gray-50">วันที่:</span>
+                        <input type="text" class="input join-item onlydate-picker" placeholder="d/m/Y"
+                            name="dateSelect" value="{{ request('dateSelect') }}" onchange="this.form.submit()" />
+                        @if (!empty(request('dateSelect')))
+                            <a href="{{ route('admin.meeting.list') }}" class="btn btn-soft btn-error join-item">ล้าง</a>
+                        @endif
+                    </div>
+                    <div class="join mb-3 mx-2 md:mt-0">
                         <label class="input join-item w-auto" for="status">สถานะ : </label>
                         <select class="select joint-item rounded-r-full" onchange="this.form.submit()" name="status"
                             id="status">
@@ -22,7 +31,7 @@
                                     class="badge bg-gray-100 text-gray-800 font-bold">เสร็จสิ้น</span></option>
                         </select>
                     </div>
-                    <div class="join w-full mb-3 mx-2 md:mt-0">
+                    <div class="join mb-3 mx-2 md:mt-0">
                         <label class="input join-item w-auto" for="zoom_use">Zoom: </label>
                         <select class="select join-item" onchange="this.form.submit()" name="zoom_use" id="zoom_use">
                             <option value="">all</option>
@@ -30,7 +39,7 @@
                             <option value="0" @selected(request('zoom_use') == '0')>ไม่ใช้</option>
                         </select>
                     </div>
-                    <div class="join w-full mb-3 mx-2 md:mt-0">
+                    <div class="join mb-3 mx-2 md:mt-0">
                         <label class="input join-item w-auto" for="zoom_use">เครื่องเสียง:</label>
                         <select class="select join-item" onchange="this.form.submit()" name="audio_system"
                             id="audio_system">
@@ -140,7 +149,7 @@
                                     <span
                                         class="lg:hidden absolute left-4 top-3 font-semibold text-gray-500">รายละเอียด:</span>
                                     <a class="inline-flex justify-center items-center w-full p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition shadow-sm"
-                                        href="{{ route('meeting.show', $meeting->id) }}" title="รายละเอียด">
+                                        href="{{ route('admin.meeting.show', $meeting->id) }}" title="รายละเอียด">
                                         <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path

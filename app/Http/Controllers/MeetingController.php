@@ -7,13 +7,10 @@ use App\Models\Department;
 use App\Models\Employee;
 use App\Models\Meeting;
 use App\Models\Room;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
-
-use function React\Promise\all;
 
 class MeetingController extends Controller
 {
@@ -68,6 +65,8 @@ class MeetingController extends Controller
         $status = $request->input('status');
         $zoom_use = $request->input('zoom_use');
         $audio_system = $request->input('audio_system');
+        $dateSelect = $request->input('dateSelect');
+
 
         $meetings = Meeting::query()
             ->with(['room', 'employee', 'department', 'status'])
@@ -96,7 +95,7 @@ class MeetingController extends Controller
                         ->where('end_time', '<', now());
                 }
             })
-            // เช็ค zoom_use 
+            // เช็ค zoom_use
             ->when($zoom_use !== '' && $zoom_use !== null && $zoom_use !== '*', function ($query) use ($zoom_use) {
 
                 if ($zoom_use === '1' || $zoom_use === 1) {
@@ -105,7 +104,7 @@ class MeetingController extends Controller
                     $query->where('link_zoom', null);
                 }
             })
-            // เช็ค audio_system 
+            // เช็ค audio_system
             ->when($audio_system !== '' && $audio_system !== null && $audio_system !== '*', function ($query) use ($audio_system) {
 
 
@@ -114,6 +113,9 @@ class MeetingController extends Controller
                 } else if ($audio_system === '0' || $audio_system === 0) {
                     $query->where('audio_system', 0);
                 }
+            })
+            ->when($dateSelect !== '' & $dateSelect !== null, function ($query) use ($dateSelect) {
+                $query->whereDate('start_time', $dateSelect);
             })
             ->orderBy('id', $order ?? 'desc')
             ->paginate($limit)
@@ -125,6 +127,7 @@ class MeetingController extends Controller
 
         return view('meeting.personal', compact('search', 'meetings'));
     }
+    
     public function adminMeetingManage(Request $request)
     {
         $search = $request->input('search');
@@ -133,6 +136,7 @@ class MeetingController extends Controller
         $status = $request->input('status');
         $zoom_use = $request->input('zoom_use');
         $audio_system = $request->input('audio_system');
+        $dateSelect = $request->input('dateSelect');
 
         $meetings =  Meeting::query()
             ->with(['room', 'employee', 'department', 'status'])
@@ -159,7 +163,7 @@ class MeetingController extends Controller
                         ->where('end_time', '<', now());
                 }
             })
-            // เช็ค zoom_use 
+            // เช็ค zoom_use
             ->when($zoom_use !== '' && $zoom_use !== null && $zoom_use !== '*', function ($query) use ($zoom_use) {
                 if ($zoom_use === '1' || $zoom_use === 1) {
                     $query->where('zoom_use', 1);
@@ -167,13 +171,16 @@ class MeetingController extends Controller
                     $query->where('zoom_use', 0);
                 }
             })
-            // เช็ค audio_system 
+            // เช็ค audio_system
             ->when($audio_system !== '' && $audio_system !== null && $audio_system !== '*', function ($query) use ($audio_system) {
                 if ($audio_system === '1' || $audio_system === 1) {
                     $query->where('audio_system', 1);
                 } else if ($audio_system === '0' || $audio_system === 0) {
                     $query->where('audio_system', 0);
                 }
+            })
+            ->when($dateSelect !== '' & $dateSelect !== null, function ($query) use ($dateSelect) {
+                $query->whereDate('start_time', $dateSelect);
             })
             ->orderBy('id', $order ?? 'desc')
             ->paginate($limit)
@@ -185,12 +192,14 @@ class MeetingController extends Controller
 
         return view('admin.meeting.list', compact('meetings', 'search'));
     }
+
     public function zoomList(Request $request)
     {
         $search = $request->input('search');
         $limit = $request->input('limit', 5);
         $order = $request->input('order', 'desc');
         $audio_system = $request->input('audio_system');
+        $dateSelect = $request->input('dateSelect');
 
         $meetings =  Meeting::query()
             ->with(['room', 'employee', 'department', 'status'])
@@ -207,6 +216,9 @@ class MeetingController extends Controller
                     $query->where('audio_system', 0);
                 }
             })
+            ->when($dateSelect !== '' & $dateSelect !== null, function ($query) use ($dateSelect) {
+                $query->whereDate('start_time', $dateSelect);
+            })
             ->orderBy('id', $order ?? 'desc')
             ->paginate($limit)
             ->withQueryString();
@@ -219,14 +231,14 @@ class MeetingController extends Controller
 
     public function zoomCreate(Request $request)
     {
-        $meeting = Meeting::where('id', $request['id'])
+        $meeting = Meeting::query()->where('id', $request['id'])
             ->where('zoom_use', 1)
             ->where('room_status_id', 1)
             ->where('end_time', '>=', now())
             ->first();
         if (!$meeting) {
             Alert('ไม่พบข้อมูล', 'ไม่พบรายการที่ร้องขอ', 'info');
-            return redirect()->route('admin.zoom.list');
+            return redirect()->route('zoom.list');
         }
         return view('admin.zoom.create', compact('meeting'));
     }
@@ -252,20 +264,20 @@ class MeetingController extends Controller
         $ZoomPasscode = $request['zoomPasscode'];
         $MeetingID = $request['id'];
 
-        Meeting::where('id', $MeetingID)->update([
+        Meeting::query()->where('id', $MeetingID)->update([
             'link_zoom' => $ZoomUrl,
             'zoom_id' => $ZoomID,
             'passcode_zoom' => $ZoomPasscode
         ]);
 
-        $meeting = Meeting::where('id', $request['id'])->first();
+        $meeting = Meeting::query()->where('id', $request['id'])->first();
         // 1. ค้นหา Employee จาก emp_code
-        $requester = Employee::where('code_emp', $meeting->emp_code)->first();
+        $requester = Employee::query()->where('code_emp', $meeting->emp_code)->first();
 
         // 2. เช็คก่อนว่ามีพนักงานคนนี้จริงๆ ค่อยส่งแจ้งเตือน
         if ($requester) {
             NotificationController::send(
-                $requester, // 
+                $requester, //
                 'Admin ได้เพิ่มลิงก์ Zoom ของ ' . $meeting->title . ' แล้ว',
                 route('meeting.show', $meeting->id),
                 $MeetingID,
@@ -273,8 +285,7 @@ class MeetingController extends Controller
             );
 
             $adminGroup = config('auth.admin_users', []);
-            // $admins = Employee::whereIn('code_emp', $adminGroup)->get();
-            $adminIds = Employee::whereIn('code_emp', $adminGroup)->pluck('code_emp');
+            $adminIds = Employee::whereIn('code_emp', $adminGroup, 'and', false)->pluck('code_emp');
 
             DB::table('notifications')
                 ->where('type', 'App\Notifications\RealtimeNotification')
@@ -282,11 +293,8 @@ class MeetingController extends Controller
                 ->where('data->meeting_id', $MeetingID) // ค้นหาเจาะจงใน JSON
                 ->update(['read_at' => now()]);
         }
-
         Alert::success('สำเร็จ', 'บันทึกลิงก์ Zoom เรียบร้อยแล้ว');
-
-
-        return redirect()->route('admin.zoom.list');
+        return redirect()->route('zoom.list');
     }
 
     /**
@@ -330,7 +338,7 @@ class MeetingController extends Controller
         $roomId = $request['meetingRoom'];
 
         // 1.Check สถานะห้องและเวลาที่จอง
-        $checkStatus = Meeting::where('room_id', $roomId)->where(function ($query) use ($startTime, $endTime) {
+        $checkStatus = Meeting::query()->where('room_id', $roomId)->where(function ($query) use ($startTime, $endTime) {
             $query->where('start_time', '<', $endTime)->where('end_time', '>', $startTime)->where('room_status_id', '=', 1);
         })->exists();
 
@@ -358,15 +366,14 @@ class MeetingController extends Controller
 
         if ($meeting->zoom_use == 1) {
             $adminGroup = config('auth.admin_users', []);
-            $admins = Employee::whereIn('code_emp', $adminGroup)->get();
+            $admins = Employee::whereIn('code_emp', $adminGroup, 'and', false)->get();
             NotificationController::send($admins, 'มีผู้ร้องขอ Link Zoom', route('admin.zoom.create', $meeting->id), $meeting->id, $meeting->title);
         }
 
         return redirect()->route('home');
     }
 
-
-    public function show($id)
+    public function show(string $id)
     {
 
         $meeting = Meeting::findOrFail($id);
@@ -378,12 +385,22 @@ class MeetingController extends Controller
         return view('meeting.show', compact('meeting'));
     }
 
+    public function adminShow(string $id)
+    {
+        $meeting = Meeting::findOrFail($id);
+
+        if (Auth::user()->cannot('view', $meeting)) {
+            return redirect()->route('home');
+        }
+
+        return view('admin.meeting.show', compact('meeting'));
+    }
 
     public function adminCancelMeeting(Request $request)
     {
         $MeetingID = $request['id'];
 
-        Meeting::where('id', $MeetingID)->update([
+        Meeting::query()->where('id', $MeetingID)->update([
             'room_status_id' => 2,
             'cancel_user' => trim(Auth::user()->name_thai_emp)
         ]);
@@ -397,7 +414,7 @@ class MeetingController extends Controller
     {
         $MeetingID = $request['id'];
 
-        Meeting::where('id', $MeetingID)->update([
+        Meeting::query()->where('id', $MeetingID)->update([
             'room_status_id' => 2,
             'cancel_user' => trim(Auth::user()->name_thai_emp)
         ]);

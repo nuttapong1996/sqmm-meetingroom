@@ -34,7 +34,7 @@ class CheckEmployee extends Controller
             return back()->with('error', $validator->errors()->first());
         }
 
-        $emp = Employee::where('code_emp', $request['empcode'])->first();
+        $emp = Employee::query()->where('code_emp', $request['empcode'])->first();
 
 
         if ($emp) {

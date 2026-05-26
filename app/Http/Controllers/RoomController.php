@@ -28,15 +28,14 @@ class RoomController extends Controller
 
         return view('admin.room.index', compact('search', 'rooms'));
     }
-
-
+    
     public function getRoomStatus()
     {
 
         $now = Carbon::now();
 
         $rooms = Room::all()->map(function ($room) use ($now) {
-            $currentMeeting = Meeting::where('room_id', $room->id)
+            $currentMeeting = Meeting::query()->where('room_id', $room->id)
                 ->where('start_time', '<=', $now)
                 ->where('end_time', '>=', $now)
                 ->first();
@@ -51,10 +50,9 @@ class RoomController extends Controller
                 'meeting_title' => $currentMeeting ? $currentMeeting->title : '-'
             ];
         });
-        
+
         return response()->json($rooms);
     }
-
 
     /**
      * Show the form for creating a new resource.

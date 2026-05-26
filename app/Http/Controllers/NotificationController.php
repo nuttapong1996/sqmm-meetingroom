@@ -3,21 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Notifications\RealtimeNotification;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 
 
 class NotificationController extends Controller
 {
-    public static function send($receivers, $message, $url = null, $meeting_id = null , $meeting_title = null)
+    public static function send(string $receivers, string $message, $url = null, $meeting_id = null , $meeting_title = null)
     {
         // เปลี่ยนมาใช้ Notification::send แทน ->notify()
         Notification::send($receivers, new RealtimeNotification($message, $url, $meeting_id , $meeting_title));
     }
 
 
-    public function markAsRead($id)
+    public function markAsRead(string $id)
     {
 
         $notification = Auth::user()->notifications()->where('id', $id)->first();
@@ -38,7 +37,7 @@ class NotificationController extends Controller
     }
 
     // ลบการแจ้งเตือน
-    public function destroy($id)
+    public function destroy(string $id)
     {
         $notification = Auth::user()->notifications()->where('id', $id)->first();
 

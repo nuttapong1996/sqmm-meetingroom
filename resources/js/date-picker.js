@@ -1,3 +1,4 @@
+import flatpickr from "flatpickr";
 import { Thai } from "flatpickr/dist/l10n/th.js";
 document.addEventListener("DOMContentLoaded", function () {
     // เปลี่ยนมาใช้ class .date-picker เพื่อให้ครอบคลุมทั้งช่องเริ่มและสิ้นสุด
@@ -30,4 +31,13 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         },
     });
+
+    flatpickr(".onlydate-picker" ,{
+        locale:Thai,
+        altInput:true,
+        enableTime:false,
+        dateFormat: "Y-m-d",
+        altFormat: "d/m/Y",
+        // altFormat: "j F Y ",
+    })
 });
