@@ -1,5 +1,7 @@
 <x-app-layout title="เข้าสู่ระบบ">
     <div class="flex flex-col justify-center items-center h-100">
+        <img class="w-20 h-20" src="{{ asset('images/logo.png') }}">
+        <h2 class="text-xl-center mt-2 mb-2">ระบบจองห้องประชุม</h2>
         <fieldset class="fieldset bg-white bg-base-200 border-base-300 rounded-box w-xs border p-4">
             <legend class="fieldset-legend text-gray-100 bg-neutral p-2 rounded-3xl">เข้าสู่ระบบ</legend>
             <form class="fieldset w-xs" action="{{ route('check-emp') }}" method="POST" novalidate>

@@ -13,8 +13,8 @@
                     </label>
                     <div class="drawer-side">
                         <label for="my-drawer-1" aria-label="close sidebar" class="drawer-overlay"></label>
-
                         <ul class="menu flex flex-col bg-base-200 min-h-full w-80 p-4">
+                            <img class="h-10  w-10  flex lg:hidden" src="{{ asset('images/logo.png') }}" alt="">
                             <a class="btn text-xl text-gray-50 bg-neutral mx-5"
                                 href="{{ route('home') }}">{{ config('app.name') }}</a>
                             @auth
@@ -70,7 +70,8 @@
                     </div>
                 </div>
                 {{-- logo --}}
-                <a class="hidden lg:flex btn text-xl text-neutral bg-transparent border-neutral mx-5"
+                <img class="h-10 w-auto mx-2 hidden lg:flex" src="{{ asset('images/logo.png') }}" alt="">
+                <a class="hidden lg:flex btn text-base text-neutral bg-transparent border-neutral "
                     href="{{ route('home') }}">{{ config('app.name') }}</a>
 
                 {{-- Menu Desktop --}}
