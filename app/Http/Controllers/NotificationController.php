@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Notification;
 
 class NotificationController extends Controller
 {
-    public static function send(string $receivers, string $message, $url = null, $meeting_id = null , $meeting_title = null)
+    public static function send($receivers, string $message, $url = null, $meeting_id = null , $meeting_title = null)
     {
         // เปลี่ยนมาใช้ Notification::send แทน ->notify()
         Notification::send($receivers, new RealtimeNotification($message, $url, $meeting_id , $meeting_title));

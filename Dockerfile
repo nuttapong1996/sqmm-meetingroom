@@ -23,7 +23,7 @@ WORKDIR /var/www/html
 
 # ติดตั้ง System Dependencies และ PostgreSQL extension
 RUN apk add --no-cache libpq-dev postgresql-client tzdata icu-dev \
-    && docker-php-ext-install pdo pdo_pgsql pgsql intl
+    && docker-php-ext-install pdo pdo_pgsql pgsql intl pcntl
 
 # Copy source code ของโปรเจกต์
 COPY . .
