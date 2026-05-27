@@ -6,6 +6,7 @@ use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class CheckEmployee extends Controller
 {
@@ -20,8 +21,7 @@ class CheckEmployee extends Controller
 
     public function login(Request $request)
     {
-        $validator = Validator::make(
-            $request->all(),
+        $request->validate(
             [
                 'empcode' => 'required|string'
             ],
@@ -30,21 +30,16 @@ class CheckEmployee extends Controller
             ]
         );
 
-        if ($validator->fails()) {
-            return back()->with('error', $validator->errors()->first());
-        }
-
         $emp = Employee::query()->where('code_emp', $request['empcode'])->first();
-
 
         if ($emp) {
             Auth::login($emp);
             $request->session()->regenerate();
-
             return redirect()->route('home');
         }
 
-        return back()->with('error', 'รหัสพนักงานไม่ถูกต้อง');
+        Alert('รหัสพนักงานไม่ถูกต้อง', 'กรุณาตรวจสอบ', 'error');
+        return back()->withInput();
     }
 
 

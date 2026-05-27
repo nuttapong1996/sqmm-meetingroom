@@ -4,6 +4,7 @@ namespace App\Providers;
 
 
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -21,7 +22,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-       // กำหนดสิทธิ์ชื่อ 'is-admin'
+        if (config('app.env') === 'production') {
+            URL::forceScheme('https');
+        }
+
+        // กำหนดสิทธิ์ชื่อ 'is-admin'
         Gate::define('is-admin', function ($user) {
             return $user->isAdmin();
         });

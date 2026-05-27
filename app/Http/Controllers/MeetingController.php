@@ -127,7 +127,7 @@ class MeetingController extends Controller
 
         return view('meeting.personal', compact('search', 'meetings'));
     }
-    
+
     public function adminMeetingManage(Request $request)
     {
         $search = $request->input('search');
@@ -289,8 +289,8 @@ class MeetingController extends Controller
 
             DB::table('notifications')
                 ->where('type', 'App\Notifications\RealtimeNotification')
-                ->whereIn('notifiable_id', $adminIds) // ค้นหาเจาะจงใน JSON
-                ->where('data->meeting_id', $MeetingID) // ค้นหาเจาะจงใน JSON
+                ->whereIn('notifiable_id', $adminIds)
+                ->whereRaw("data::jsonb->>'meeting_id' = ?", [(string) $MeetingID])
                 ->update(['read_at' => now()]);
         }
         Alert::success('สำเร็จ', 'บันทึกลิงก์ Zoom เรียบร้อยแล้ว');
