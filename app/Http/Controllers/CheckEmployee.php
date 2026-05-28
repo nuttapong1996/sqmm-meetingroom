@@ -30,7 +30,7 @@ class CheckEmployee extends Controller
             ]
         );
 
-        $emp = Employee::query()->where('code_emp', $request['empcode'])->first();
+        $emp = Employee::query()->where('code_emp', $request['empcode'])->where('status_emp', 10)->first();
 
         if ($emp) {
             Auth::login($emp);
