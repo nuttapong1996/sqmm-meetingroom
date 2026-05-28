@@ -35,7 +35,6 @@ document.addEventListener("DOMContentLoaded", () => {
                         el.classList.remove("bg-blue-50", "font-semibold");
                         el.classList.add("bg-white", "text-gray-500");
                     });
-
                     const btn = document.getElementById("btn-mark-all");
                     if (btn) btn.style.display = "none";
 

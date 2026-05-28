@@ -185,6 +185,7 @@
                                         </span>
                                     </li>
                                 @endforelse
+                                <button class="btn btn-ghost btn-sm w-full mt-2 " onclick="markAllAsRead()">อ่านทั้งหมด</button>
                             </ul>
                         </div>
                     </div>
