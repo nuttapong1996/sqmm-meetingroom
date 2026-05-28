@@ -14,6 +14,7 @@
     @auth
         <meta name="user-id" content="{{ Auth::user()->code_emp }}">
     @endauth
+    @PwaHead
     @googlefonts
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <title>{{ $title }}-{{ config('app.name') }}</title>
@@ -35,13 +36,14 @@
         </aside>
     </footer>
     @include('sweetalert::alert')
-</body>
-<script>
+    @RegisterServiceWorkerScript
+    <script>
         window.ReverbConfig = {
-            key: '{{ env("REVERB_APP_KEY") }}',
+            key: '{{ env('REVERB_APP_KEY') }}',
             host: '{{ request()->getHost() }}',
             port: {{ env('REVERB_FRONTEND_PORT', 443) }},
             scheme: '{{ env('REVERB_FRONTEND_SCHEME', 'https') }}'
         };
     </script>
+</body>
 </html>
