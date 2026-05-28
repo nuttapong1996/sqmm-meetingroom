@@ -41,8 +41,8 @@
         window.ReverbConfig = {
             key: '{{ env('REVERB_APP_KEY') }}',
             host: '{{ request()->getHost() }}',
-            port: {{ env('REVERB_FRONTEND_PORT', 443) }},
-            scheme: '{{ env('REVERB_FRONTEND_SCHEME', 'https') }}'
+            port: {{ env('VITE_REVERB_PORT', 443) }},
+            scheme: '{{ env('VITE_REVERB_SCHEME', 'https') }}'
         };
     </script>
 </body>

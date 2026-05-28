@@ -285,13 +285,20 @@ class MeetingController extends Controller
             );
 
             $adminGroup = config('auth.admin_users', []);
-            $adminIds = Employee::whereIn('code_emp', $adminGroup, 'and', false)->pluck('code_emp');
+            $adminIds = Employee::whereIn('code_emp', $adminGroup ,'and', false)->get();
 
-            DB::table('notifications')
-                ->where('type', 'App\Notifications\RealtimeNotification')
-                ->whereIn('notifiable_id', $adminIds)
-                ->whereRaw("data::jsonb->>'meeting_id' = ?", [(string) $MeetingID])
-                ->update(['read_at' => now()]);
+            // วนลูปตัวแปร $admins
+            foreach ($adminIds as $admin) {
+                // ตอนนี้ $admin จะเป็น Object ของ Employee แล้ว เรียกใช้งาน Relation ได้เลย
+                if ($admin->unreadNotifications) {
+                    $admin->unreadNotifications->each(function ($notification) use ($MeetingID) {
+                        // เช็คว่าใช่แจ้งเตือนของห้องนี้ไหม
+                        if (isset($notification->data['meeting_id']) && $notification->data['meeting_id'] == $MeetingID) {
+                            $notification->markAsRead();
+                        }
+                    });
+                }
+            }
         }
         Alert::success('สำเร็จ', 'บันทึกลิงก์ Zoom เรียบร้อยแล้ว');
         return redirect()->route('zoom.list');
