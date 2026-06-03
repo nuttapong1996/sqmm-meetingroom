@@ -7,7 +7,6 @@ use App\Models\Room;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class RoomController extends Controller
@@ -28,7 +27,7 @@ class RoomController extends Controller
 
         return view('admin.room.index', compact('search', 'rooms'));
     }
-    
+
     public function getRoomStatus()
     {
 
@@ -68,8 +67,8 @@ class RoomController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make(
-            $request->all(),
+
+        $request->validate(
             [
                 'roomName' => 'required|unique:rooms,name',
                 'roomColor' => 'unique:rooms,color',
@@ -84,13 +83,8 @@ class RoomController extends Controller
             ]
         );
 
-        if ($validator->fails()) {
-            return back()->with('error', $validator->errors()->all())->withInput();
-        }
-
         if ($request->hasFile('roomPic')) {
             $image = $request->file('roomPic');
-
 
             // Create new name: filename_timestamp.extension
             $newFileName = $request['roomName'] . '_' . time() . '.' . $image->getClientOriginalExtension();
@@ -130,11 +124,11 @@ class RoomController extends Controller
     /**
      * Update the specified resource in storage.
      */
+    //TODO3 แก้ไข RoomController : store
     public function update(Request $request, Room $room)
     {
-
         // 1. Validation
-        $validator = Validator::make($request->all(), [
+        $request->validate([
             'roomColor' => "unique:rooms,color,{$room->id}",
             'roomPic'   => "nullable|image|max:2048", // เพิ่ม validation รูปด้วยเพื่อความปลอดภัย
         ], [
@@ -143,9 +137,6 @@ class RoomController extends Controller
             'roomPic.max' => 'ไฟล์รูปต้องมีขนาดไม่เกิน 2 MB',
         ]);
 
-        if ($validator->fails()) {
-            return back()->with('error', $validator->errors()->all());
-        }
 
         try {
             // 2. จัดการเรื่องรูปภาพ

@@ -1,0 +1,5 @@
+- แก้ไขการแสดง error ฟอร์มสร้าง room
+- แก้ไขการแสดง error ฟอร์มแก้ไข room
+- แก้ไข RoomController : store
+- แก้ไข RoomController : update
+

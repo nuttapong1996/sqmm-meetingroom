@@ -1,14 +1,15 @@
 <x-admin-layout title="แก้ไขห้องประชุม {{ $room->name }}">
     <x-slot name="breadcrumbs">
-        {{ Breadcrumbs::render('room.edit' , $room->id) }}
+        {{ Breadcrumbs::render('room.edit', $room->id) }}
     </x-slot>
     <x-slot name="AdminContent">
         <div class="flex justify-center mt-3">
-            <form class="fieldset w-xs lg:w-lg" action="{{ route('room.update' ,$room->id) }}" method="POST" enctype="multipart/form-data">
+            <form class="fieldset w-xs lg:w-lg" action="{{ route('room.update', $room->id) }}" method="POST"
+                enctype="multipart/form-data">
                 <fieldset class="fieldset shadow bg-base-100 border-base-300 rounded-box border p-4 w-full ">
                     @csrf
                     @method('PUT')
-                    <x-error-alert></x-error-alert>
+                    {{-- //TODO2  แก้ไขการแสดง error ฟอร์มแก้ไข room --}}
                     <legend class="fieldset-legend text-base text-primary">แก้ไขห้องประชุม</legend>
                     <label class="label text-base text-primary">ชื่อห้องประชุม</label>
                     <input type="text" disabled name="roomName" class="input text-base text-primary w-full"
@@ -16,7 +17,12 @@
 
                     <label class="label text-base text-primary mt-3">สี</label>
                     <input type="color" name="roomColor" value="{{ $room->color }}"
-                        class="input input-primary p-2 w-30  cursor-pointer" placeholder="กรุณาเลือกสี" />
+                        class="input validator @error('roomColor') input-error @enderror  p-2 w-30  cursor-pointer"
+                        placeholder="กรุณาเลือกสี"
+                        oninput="this.classList.remove('input-error'); document.getElementById('error-roomColor')?.remove();" />
+                    @error('roomColor')
+                        <div id="error-roomColor" class="text-error text-sm mt-1">{{ $message }}</div>
+                    @enderror
 
                     <x-image-upload title="รูปห้องประชุม" name="roomPic">
                         <x-slot name="imagePrev">
@@ -24,6 +30,9 @@
                                 alt="" srcset="">
                         </x-slot>
                     </x-image-upload>
+                     @error('roomPic')
+                        <div id="error-roomPic" class="text-error text-sm mt-1">{{ $message }}</div>
+                    @enderror
                     <button class="btn btn-neutral my-3" type="submit">ตกลง</button>
                 </fieldset>
             </form>
