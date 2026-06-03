@@ -19,7 +19,7 @@
                     @enderror
                     <label class="label text-base text-primary mt-3">สี</label>
                     <input type="color" name="roomColor" value="{{ old('roomColor') }}"
-                        class="input validator @error('roomName') input-error @enderror  p-2 w-30  cursor-pointer"
+                        class="input validator @error('roomColor') input-error @enderror  p-2 w-30  cursor-pointer"
                         placeholder="กรุณาเลือกสี"
                         oninput="this.classList.remove('input-error'); document.getElementById('error-roomColor')?.remove();" />
                     @error('roomColor')

@@ -124,7 +124,6 @@ class RoomController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    //TODO3 แก้ไข RoomController : store
     public function update(Request $request, Room $room)
     {
         // 1. Validation

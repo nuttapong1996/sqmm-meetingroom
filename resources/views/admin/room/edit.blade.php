@@ -9,7 +9,6 @@
                 <fieldset class="fieldset shadow bg-base-100 border-base-300 rounded-box border p-4 w-full ">
                     @csrf
                     @method('PUT')
-                    {{-- //TODO2  แก้ไขการแสดง error ฟอร์มแก้ไข room --}}
                     <legend class="fieldset-legend text-base text-primary">แก้ไขห้องประชุม</legend>
                     <label class="label text-base text-primary">ชื่อห้องประชุม</label>
                     <input type="text" disabled name="roomName" class="input text-base text-primary w-full"
