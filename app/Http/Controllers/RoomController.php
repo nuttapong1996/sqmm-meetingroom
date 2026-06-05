@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
 
+use function PHPSTORM_META\map;
+
 class RoomController extends Controller
 {
     /**
@@ -28,7 +30,7 @@ class RoomController extends Controller
         return view('admin.room.index', compact('search', 'rooms'));
     }
 
-    public function getRoomStatus()
+    public function allRoomStatus()
     {
 
         $now = Carbon::now();
@@ -46,13 +48,74 @@ class RoomController extends Controller
                 // ถ้ามีข้อมูลแปลว่า "ไม่ว่าง" ถ้าไม่มีแปลว่า "ว่าง (free)"
                 'status' => $currentMeeting ? 'busy' : 'free',
                 // แนบชื่อเรื่องประชุมไปด้วย (ถ้ามี)
-                'meeting_title' => $currentMeeting ? $currentMeeting->title : '-'
+                'meeting_title' => $currentMeeting ? $currentMeeting->title : '-',
+                'zoom_use' => $currentMeeting ? $currentMeeting->zoom_use : '-',
+                'audio_system' => $currentMeeting ? $currentMeeting->audio_system : '-',
             ];
         });
 
         return response()->json($rooms);
     }
 
+    public function getRoomStatus($id)
+    {
+        $now = Carbon::now();
+
+        $room = Room::query()->find($id);
+
+        if (!$room) {
+            return response()->json(['message' => 'Room not found'], 404);
+        }
+
+        $current = Meeting::query()
+            ->where('room_id', $id)
+            ->where('start_time', '<=', $now)
+            ->where('end_time', '>=', $now)
+            ->first();
+
+        $upnext = Meeting::query()
+            ->where('room_id', $id)
+            ->where('start_time', '>', $now)
+            ->orderBy('start_time', 'asc')
+            ->first();
+
+        $result = [
+            'room' => [
+                'name' => $room->name,
+                'color' => $room->color,
+                'status' => $current ? 'busy' : 'free',
+            ],
+            'current' => [
+                'title' => $current ? $current->title : '-',
+                'start' => $current ? $current->start_time : '-',
+                'end' => $current ? $current->end_time : '-',
+                'zoom' => $current ? $current->zoom_use  : '-',
+                'audio' => $current ? $current->audio_system : '-',
+            ],
+            'next' => [
+                'title' => $upnext ? $upnext->title : '-',
+                'start' => $upnext ? $upnext->start_time : '-',
+                'end' => $upnext ? $upnext->end_time : '-',
+                'zoom' => $upnext ? $upnext->zoom_use  : '-',
+                'audio' => $upnext ? $upnext->audio_system : '-',
+            ]
+        ];
+
+
+
+
+        // $room = Room::all()->map(function ($id) use ($now) {
+        //
+        // });
+
+        return response()->json($result);
+    }
+
+    public function roomStatus($id)
+    {
+        $room = Room::findOrFail($id);
+        return view('rooms.status', compact('room'));
+    }
     /**
      * Show the form for creating a new resource.
      */

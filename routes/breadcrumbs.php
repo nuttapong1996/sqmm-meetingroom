@@ -9,6 +9,11 @@ Breadcrumbs::for('home', function (BreadcrumbTrail $trail) {
     $trail->push('หน้าหลัก', route('home'));
 });
 
+Breadcrumbs::for('room.status' ,function(BreadcrumbTrail $trail , $id ,$room_name){
+    $trail->parent('home');
+    $trail->push('สถานะห้องประชุม: '.$room_name , route('room.status', $id));
+});
+
 Breadcrumbs::for('personal.events', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
     $trail->push('รายการจองของฉัน', route('personal.events'));

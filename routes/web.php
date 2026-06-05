@@ -11,6 +11,8 @@ Route::get('/', function () {
     return view('home');
 })->name('home');
 
+Route::get('room/status/{id}', [RoomController::class, 'roomStatus'])->name('room.status');
+
 Route::middleware('guest')->group(function () {
     Route::get('login', [CheckEmployee::class, 'index'])->name('login');
     Route::post('login', [CheckEmployee::class, 'login'])->name('check-emp');
