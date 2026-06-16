@@ -1,8 +1,8 @@
 import flatpickr from "flatpickr";
 import { Thai } from "flatpickr/dist/l10n/th.js";
 document.addEventListener("DOMContentLoaded", function () {
-    // เปลี่ยนมาใช้ class .date-picker เพื่อให้ครอบคลุมทั้งช่องเริ่มและสิ้นสุด
-    flatpickr(".date-picker", {
+    // เปลี่ยนมาใช้ class .date-time-picker เพื่อให้ครอบคลุมทั้งช่องเริ่มและสิ้นสุด
+    flatpickr(".date-time-picker", {
         locale: Thai, // ใช้ตัวแปร Thai ที่ import มา
         altInput: true,
         enableTime: true,
@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
         },
     });
 
-    flatpickr(".onlydate-picker" ,{
+    flatpickr(".date-picker" ,{
         locale:Thai,
         altInput:true,
         enableTime:false,

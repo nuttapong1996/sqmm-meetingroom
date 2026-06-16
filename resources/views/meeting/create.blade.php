@@ -53,8 +53,8 @@
 
                 <!-- 4. วันที่และเวลา (ปรับ id ไม่ให้ซ้ำกัน และเพิ่ม error state) -->
                 <label class="label text-base mt-2" for="start_date">เริ่มใช้</label>
-                <input type="text" id="date-picker" name="start_date"
-                    class="input date-picker validator  w-full @error('start_date') input-error @enderror"
+                <input type="text" id="date-time-picker" name="start_date"
+                    class="input date-time-picker validator  w-full @error('start_date') input-error @enderror"
                     placeholder="เลือกวันที่เริ่มใช้" required value="{{ old('start_date') }}">
                 @error('start_date')
                     <div id="error-start_date" class="text-error text-sm mt-1">{{ $message }}</div>
@@ -62,8 +62,8 @@
 
 
                 <label class="label text-base mt-2" for="end_date">สิ้นสุด</label>
-                <input type="text" id="date-picker" name="end_date"
-                    class="input date-picker validator  w-full @error('end_date') input-error @enderror"
+                <input type="text" id="date-time-picker" name="end_date"
+                    class="input date-time-picker validator  w-full @error('end_date') input-error @enderror"
                     placeholder="เลือกวันที่สิ้นสุด" required value="{{ old('end_date') }}">
                 @error('end_date')
                     <div id="error-end_date" class="text-error text-sm mt-1">{{ $message }}</div>

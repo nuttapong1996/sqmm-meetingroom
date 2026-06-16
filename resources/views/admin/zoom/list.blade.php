@@ -10,7 +10,7 @@
                     <div class="join mb-3 mx-2 lg:mb-0">
                         <span
                             class="input join-item w-15 flex items-center whitespace-nowrap  bg-gray-50">วันที่:</span>
-                        <input type="text" class="input join-item onlydate-picker" placeholder="d/m/Y"
+                        <input type="text" class="input join-item date-picker" placeholder="d/m/Y"
                             name="dateSelect" value="{{ request('dateSelect') }}" onchange="this.form.submit()" />
                         @if (!empty(request('dateSelect')))
                             <a href="{{ route('zoom.list') }}"

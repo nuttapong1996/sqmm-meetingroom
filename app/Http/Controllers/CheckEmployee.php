@@ -23,18 +23,25 @@ class CheckEmployee extends Controller
     {
         $request->validate(
             [
-                'empcode' => 'required|string'
+                'empcode' => 'required|string',
+                'empBdate' => 'required|string'
             ],
             [
-                'empcode.required' => 'กรุณากรอกรหัสพนักงานให้ถูกต้อง'
+                'empcode.required' => 'กรุณากรอกรหัสพนักงานให้ถูกต้อง',
+                'empBdate.required' => 'กรุณากรอกวันเดือนปีเกิดของท่าน'
             ]
         );
 
-        $emp = Employee::query()->where('code_emp', $request['empcode'])->where('status_emp', 10)->first();
+        $emp = Employee::query()
+            ->where('code_emp', $request['empcode'])
+            ->where('birdday_date_emp', $request['empBdate'])
+            ->where('status_emp', 10)
+            ->first();
 
         if ($emp) {
             Auth::login($emp);
             $request->session()->regenerate();
+            Alert::html('เข้าสู่ระบบสำเร็จ' , 'ยินดีต้อนรับ<br>คุณ' .$emp['name_thai_emp'] , 'success');
             return redirect()->route('home');
         }
 

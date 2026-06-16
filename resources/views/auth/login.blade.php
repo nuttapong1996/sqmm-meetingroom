@@ -6,16 +6,29 @@
             <legend class="fieldset-legend text-gray-100 bg-neutral p-2 rounded-3xl">เข้าสู่ระบบ</legend>
             <form class="fieldset w-xs" action="{{ route('check-emp') }}" method="POST" novalidate>
                 @csrf
-                <div class="flex flex-col">
-                    <label class="label">รหัสพนักงาน</label>
-                    <input type="text" class="input validator @error('empcode') input-error @enderror"
-                        placeholder="รหัสพนักงาน" name="empcode" id="empcode" autocomplete="off" required
+                <fieldset class="fieldset mb-3">
+                    <legend class="fieldset-legend">รหัสพนักงาน</legend>
+                    <input class="input validator @error('empcode') input-error @enderror" type="text"
+                        placeholder="รหัสพนักงาน" name="empcode" id="empcode" autocomplete="off"
                         oninput="this.classList.remove('input-error'); document.getElementById('error-empCode')?.remove();"
-                        value="{{ old('empcode') }}" />
+                        value="{{ old('empcode') }}" required/>
                     @error('empcode')
-                        <div id="error-empCode" class="text-error text-sm mt-1">{{ $message }}</div>
+                        <p id="error-empCode" class="text-xs text-red-500">{{ $message }}</p>
                     @enderror
-                </div>
+                </fieldset>
+                <fieldset class="fieldset mb-3">
+                    <legend class="fieldset-legend">วันเดือนปีเกิด (ค.ศ)</legend>
+                    <input
+                        class="input date-picker validator @error('empBdate')
+                        input-error
+                        @enderror"
+                        type="text" placeholder="วัน/เดือน/ปี (ค.ศ)" name="empBdate" id="empBdate"
+                        oninput="this.classList.remove('input-error'); document.getElementById('errorBdate')?.remove();"
+                        value="{{ old('empBdate') }}" required autocomplete="off">
+                    @error('empBdate')
+                        <p class="text-xs text-red-500" id="errorBdate">{{ $message }}</p>
+                    @enderror
+                </fieldset>
                 <button class="btn btn-neutral mt-4" type="submit">Login</button>
             </form>
 
